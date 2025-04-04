@@ -15,7 +15,7 @@ async function respond(res, successStatusCode, user) {
     sameSite: 'Strict',
   });
   res.cookie('username', user.username, {
-    httpOnly: true,
+    httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
     expires: tokenObj.expiresAt,
     sameSite: 'Strict',
@@ -101,7 +101,7 @@ async function logIn(req, res, next) {
 
 async function logOut(req, res, next) {
   res.clearCookie('authToken', { httpOnly: true });
-  res.clearCookie('username', { httpOnly: true });
+  res.clearCookie('username', { httpOnly: false });
   res.status(200).json({ success: true, message: 'Logged out' });
 }
 

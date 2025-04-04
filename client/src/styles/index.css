@@ -1,0 +1,10 @@
+html,
+body,
+#root,
+main {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
