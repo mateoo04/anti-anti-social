@@ -19,4 +19,15 @@ model User{
   lastName String
   username String @unique
   password String 
+  profileImageUrl String?
+  following   Follows[]  @relation("FollowingRelation")
+  followers   Follows[]  @relation("FollowersRelation")
+}
+model Follows{
+  followerId String
+  follower User @relation("FollowingRelation", fields: [followerId], references: [id])
+  followingId String
+  following User @relation("FollowersRelation", fields: [followingId], references: [id])
+
+  @@id([followerId, followingId])
 }

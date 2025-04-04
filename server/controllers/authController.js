@@ -59,7 +59,7 @@ async function signUp(req, res, next) {
       data: {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        username: req.body.username,
+        username: req.body.username.toLowerCase(),
         password: hashedPassword,
       },
     });
