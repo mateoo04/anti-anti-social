@@ -1,0 +1,72 @@
+import logo from '../../assets/logo.png';
+import searchIcon from '../../assets/icons/search.svg';
+import personIcon from '../../assets/icons/person-circle.svg';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/authContext';
+import { toast } from 'react-toastify';
+
+export default function Header() {
+  const { authenticatedUser, setAuthenticatedUser, isAuthenticated } =
+    useAuth();
+  const navigate = useNavigate();
+
+  const logOut = async () => {
+    try {
+      const response = await fetch('/api/auth/log-out', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (!response.ok) throw new Error('Failed to log out');
+
+      setAuthenticatedUser({});
+      navigate('/auth/log-in');
+    } catch {
+      toast.error('Failed to log out');
+    }
+  };
+
+  return (
+    <header className='container mt-3 mb-4 mb-2 d-flex justify-content-between'>
+      <Link to='/'>
+        <img src={logo} alt='anti-anti-social logo' className='logo' />
+      </Link>
+      <nav className='d-flex gap-2 align-items-center'>
+        <Link to='/search'>
+          <img src={searchIcon} alt='' className='search-icon' />
+        </Link>
+        {isAuthenticated && (
+          <div className='dropdown'>
+            <button
+              className='d-flex align-items-center gap-1 text-decoration-none text-black bg-transparent border-0'
+              data-bs-toggle='dropdown'
+            >
+              <img src={personIcon} alt='' className='profile-icon' />
+              <p className='mb-0'>
+                {authenticatedUser.firstName + ' ' + authenticatedUser.lastName}
+              </p>
+            </button>
+            <ul className='dropdown-menu dropdown-menu-light mt-2'>
+              <li className='dropdown-item'>
+                <Link
+                  to={authenticatedUser ? `/user/${authenticatedUser.id}` : '/'}
+                  className='text-decoration-none text-black'
+                >
+                  View profile
+                </Link>
+              </li>
+              <li className='dropdown-item'>
+                <button
+                  onClick={logOut}
+                  className='border-0 bg-transparent ps-0'
+                >
+                  Log out
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
+      </nav>
+    </header>
+  );
+}

@@ -83,6 +83,18 @@ async function logIn(req, res, next) {
       where: {
         username: req.body.username,
       },
+      include: {
+        followers: {
+          select: {
+            followerId: true,
+          },
+        },
+        following: {
+          select: {
+            followingId: true,
+          },
+        },
+      },
     });
 
     if (!user) {
@@ -92,7 +104,15 @@ async function logIn(req, res, next) {
     const match = await bcrypt.compare(req.body.password, user.password);
 
     if (match) {
-      respond(res, 200, user);
+      respond(res, 200, {
+        ...user,
+        following: user.following.map(
+          (followingUser) => followingUser.followingId
+        ),
+        followers: user.followers.map(
+          (followerUser) => followerUser.followerId
+        ),
+      });
     } else res.status(401).json('Invalid credentials');
   } catch (err) {
     next(err);
@@ -105,4 +125,35 @@ async function logOut(req, res, next) {
   res.status(200).json({ success: true, message: 'Logged out' });
 }
 
-module.exports = { signUp, logIn, logOut };
+async function validateCredentials(req, res, next) {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: req.user.id,
+    },
+    include: {
+      followers: {
+        select: {
+          followerId: true,
+        },
+      },
+      following: {
+        select: {
+          followingId: true,
+        },
+      },
+    },
+  });
+
+  return res.json({
+    success: true,
+    user: {
+      ...user,
+      following: user.following.map(
+        (followingUser) => followingUser.followingId
+      ),
+      followers: user.followers.map((followerUser) => followerUser.followerId),
+    },
+  });
+}
+
+module.exports = { signUp, logIn, logOut, validateCredentials };

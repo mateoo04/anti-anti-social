@@ -1,8 +1,16 @@
 const { Router } = require('express');
 
-const { signUp, logIn, logOut } = require('../controllers/authController');
+const {
+  signUp,
+  logIn,
+  logOut,
+  validateCredentials,
+} = require('../controllers/authController');
 const { validateSignUp, validateLogIn } = require('../lib/validators');
 const { passport } = require('../config/passport');
+
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 const authRouter = Router();
 
@@ -13,17 +21,7 @@ authRouter.post('/log-in', validateLogIn, logIn);
 authRouter.post(
   '/validate-credentials',
   passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    return res.json({
-      success: true,
-      user: {
-        id: req.user.id,
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
-        username: req.user.username,
-      },
-    });
-  }
+  validateCredentials
 );
 
 authRouter.post(

@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { z } from 'zod';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/authContext.jsx';
+import logo from '../assets/logo.png';
 
 const createUserSchema = z
   .object({
@@ -61,7 +62,8 @@ export default function SignUp() {
 
   return (
     <>
-      <main className='flex-grow-1 d-flex flex-column justify-content-center align-items-center'>
+      <main className='flex-grow-1 d-flex flex-column align-items-center'>
+        <img src={logo} alt='' className='auth-logo' />
         {Object.values(errors).length ? (
           <div className='bg-warning rounded-4 p-3 mb-3'>
             <ul className='ps-3 mb-0'>

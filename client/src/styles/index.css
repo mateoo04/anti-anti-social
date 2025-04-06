@@ -8,3 +8,49 @@ main {
 body {
   margin: 0;
 }
+
+.auth-logo {
+  width: 250px;
+  margin-top: 20px;
+  margin-bottom: 60px;
+}
+
+.logo {
+  height: 40px;
+}
+
+.profile-icon {
+  height: 24px;
+}
+
+.search-icon {
+  height: 22px;
+}
+
+.list-profile-photo {
+  height: 40px;
+}
+
+p {
+  margin-bottom: 0 !important;
+}
+
+.btn:hover,
+.btn:active {
+  opacity: 0.9;
+}
+
+.unfollow-btn,
+.follow-btn {
+  width: 95px;
+}
+
+.main-profile-photo {
+  width: 100px;
+}
+
+.link:hover,
+.btn:hover,
+input[type='submit']:hover {
+  cursor: pointer;
+}

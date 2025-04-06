@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/authContext.jsx';
+import logo from '../assets/logo.png';
 
 const logInSchema = z.object({
   username: z.string().min(2, 'Username must be at least 2 characters long'),
@@ -53,6 +54,7 @@ export default function LogIn() {
   return (
     <>
       <main className='container flex-grow-1 d-flex flex-column justify-content-center align-items-center'>
+        <img src={logo} alt='' className='auth-logo' />
         {Object.values(errors).length ? (
           <div className='bg-warning rounded-4 p-3 mb-3'>
             <ul className='ps-3 mb-0'>

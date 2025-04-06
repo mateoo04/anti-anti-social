@@ -43,7 +43,7 @@ export function AuthProvider({ children }) {
           credentials: 'include',
         });
 
-        if (response.status === 401) return;
+        if (response.status === 401) window.location.href = '/auth/log-in';
         if (!response.ok) throw new Error('Failed to validate credentials');
 
         const json = await response.json();
@@ -51,9 +51,9 @@ export function AuthProvider({ children }) {
         if (json.success) {
           setIsAuthenticated(true);
           setAuthenticatedUser(json.user);
-        }
+        } else window.location.href = '/auth/log-in';
       } catch {
-        console.log('Error validating credentials');
+        window.location.href = '/auth/log-in';
       }
     };
 
