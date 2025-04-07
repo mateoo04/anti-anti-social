@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import personSvg from '../assets/icons/person-circle.svg';
 import Header from './partials/Header';
+import Post from './partials/Post';
 
 export default function Profile() {
   const { userId } = useParams();
@@ -48,7 +49,7 @@ export default function Profile() {
                 <h1 className='mb-1'>
                   {profile.firstName + ' ' + profile.lastName}
                 </h1>
-                <p className='text-secondary'>{profile.username}</p>
+                <p className='text-muted'>{profile.username}</p>
               </div>
             </div>
             <div className='follow-stats d-flex gap-3'>
@@ -64,6 +65,20 @@ export default function Profile() {
               >
                 <p>{`${profile._count?.following} following`}</p>
               </Link>
+            </div>
+            <div className='posts mt-5 d-flex flex-column gap-2'>
+              {profile.posts?.map((post) => {
+                return (
+                  <Post
+                    firstName={profile.firstName}
+                    lastName={profile.lastName}
+                    username={profile.username}
+                    profilePhotoUrl={profile.profilePhotoUrl}
+                    dateTime={post.dateTime}
+                    content={post.content}
+                  ></Post>
+                );
+              })}
             </div>
           </>
         ) : (

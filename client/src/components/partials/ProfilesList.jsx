@@ -57,11 +57,11 @@ export default function ProfilesList({ users, onEmptyMessage }) {
                 <img
                   src={user.profileImageUrl || personSvg}
                   alt=''
-                  className='list-profile-photo'
+                  className='profile-photo-md'
                 />
                 <div>
                   <p>{user.firstName + ' ' + user.lastName}</p>
-                  <p className='text-secondary'>{user.username}</p>
+                  <p className='text-muted'>{user.username}</p>
                 </div>
               </div>
               {authenticatedUser.following?.includes(user.id) ? (

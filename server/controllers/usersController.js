@@ -56,6 +56,7 @@ async function getUserById(req, res, next) {
               follower: true,
             },
           },
+          posts: true,
         },
       });
 
@@ -76,6 +77,7 @@ async function getUserById(req, res, next) {
               following: true,
             },
           },
+          posts: true,
         },
       });
     }

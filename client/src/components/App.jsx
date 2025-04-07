@@ -9,6 +9,7 @@ import Search from './Search';
 import Profile from './Profile';
 import ProtectedRoute from './ProtectedRoute';
 import FollowsList from './FollowsList';
+import PostEditor from './PostEditor';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <FollowsList />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/posts/new',
+    element: (
+      <ProtectedRoute>
+        <PostEditor />
       </ProtectedRoute>
     ),
   },
