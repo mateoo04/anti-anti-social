@@ -3,7 +3,7 @@ import personSvg from '../../assets/icons/person-circle.svg';
 import { useAuth } from '../../context/authContext';
 import { Link } from 'react-router-dom';
 
-export default function Profiles({ users }) {
+export default function ProfilesList({ users, onEmptyMessage }) {
   const { authenticatedUser, setAuthenticatedUser } = useAuth();
 
   const follow = async (id) => {
@@ -91,5 +91,5 @@ export default function Profiles({ users }) {
           </Link>
         );
       })
-    : 'No results';
+    : onEmptyMessage;
 }

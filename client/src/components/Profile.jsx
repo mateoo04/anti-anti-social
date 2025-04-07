@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import personSvg from '../assets/icons/person-circle.svg';
 import Header from './partials/Header';
@@ -52,8 +52,18 @@ export default function Profile() {
               </div>
             </div>
             <div className='follow-stats d-flex gap-3'>
-              <p>{`${profile._count?.followers} followers`}</p>
-              <p>{`${profile._count?.following} following`}</p>
+              <Link
+                to={`/user/${userId}/follows`}
+                className='text-decoration-none'
+              >
+                <p>{`${profile._count?.followers} followers`}</p>
+              </Link>
+              <Link
+                to={`/user/${userId}/follows`}
+                className='text-decoration-none'
+              >
+                <p>{`${profile._count?.following} following`}</p>
+              </Link>
             </div>
           </>
         ) : (

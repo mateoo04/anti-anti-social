@@ -8,6 +8,7 @@ import Home from './Home';
 import Search from './Search';
 import Profile from './Profile';
 import ProtectedRoute from './ProtectedRoute';
+import FollowsList from './FollowsList';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <Profile />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/user/:userId/follows',
+    element: (
+      <ProtectedRoute>
+        <FollowsList />
       </ProtectedRoute>
     ),
   },

@@ -23,12 +23,7 @@ async function respond(res, successStatusCode, user) {
 
   res.status(successStatusCode).json({
     success: true,
-    user: {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-    },
+    user,
   });
 }
 

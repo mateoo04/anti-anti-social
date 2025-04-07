@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import ProfileList from './partials/ProfileList';
+import ProfilesList from './partials/ProfilesList';
 import { useAuth } from '../context/authContext';
 import Header from './partials/Header';
 
@@ -41,11 +41,12 @@ export default function Search() {
           onChange={(e) => setSearch(e.target.value)}
           className='form-control mb-3'
         />
-        <ProfileList
+        <ProfilesList
           authenticatedUser={authenticatedUser}
           setAuthenticatedUser={setAuthenticatedUser}
           users={users}
-        ></ProfileList>
+          onEmptyMessage={'No results'}
+        ></ProfilesList>
       </main>
     </>
   );

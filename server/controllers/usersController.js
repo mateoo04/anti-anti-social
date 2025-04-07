@@ -34,7 +34,7 @@ async function getUserById(req, res, next) {
     const id = req.params.userId;
     let user = {};
 
-    if (req.query.includeFollows)
+    if (req.query.includeFollows) {
       user = await prisma.user.findUnique({
         where: {
           id,
@@ -58,7 +58,13 @@ async function getUserById(req, res, next) {
           },
         },
       });
-    else {
+
+      user = {
+        ...user,
+        following: user.following.map((item) => item.following),
+        followers: user.followers.map((item) => item.follower),
+      };
+    } else {
       user = await prisma.user.findUnique({
         where: {
           id,

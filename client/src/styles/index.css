@@ -36,7 +36,8 @@ p {
 }
 
 .btn:hover,
-.btn:active {
+.btn:active,
+.back-button:hover {
   opacity: 0.9;
 }
 
@@ -51,6 +52,11 @@ p {
 
 .link:hover,
 .btn:hover,
-input[type='submit']:hover {
+input[type='submit']:hover,
+.back-button:hover {
   cursor: pointer;
+}
+
+.back-button {
+  width: 28px;
 }
