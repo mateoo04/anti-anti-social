@@ -22,6 +22,7 @@ model User{
   profileImageUrl String?
   following   Follows[]  @relation("FollowingRelation")
   followers   Follows[]  @relation("FollowersRelation")
+  posts Post[]
 }
 model Follows{
   followerId String
@@ -30,4 +31,12 @@ model Follows{
   following User @relation("FollowersRelation", fields: [followingId], references: [id])
 
   @@id([followerId, followingId])
+}
+
+model Post{
+  id String @id @default(uuid())
+  dateTime DateTime @default(now())
+  content String
+  authorId String
+  author User @relation(fields: [authorId], references: [id])
 }

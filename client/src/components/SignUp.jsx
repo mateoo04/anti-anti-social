@@ -84,6 +84,7 @@ export default function SignUp() {
             <input
               type='text'
               name='firstName'
+              id='firstName'
               {...register('firstName')}
               className='form-control mb-3'
             />
@@ -93,6 +94,7 @@ export default function SignUp() {
             <input
               type='text'
               name='lastName'
+              id='lastName'
               {...register('lastName')}
               className='form-control mb-3'
             />
@@ -102,6 +104,7 @@ export default function SignUp() {
             <input
               type='text'
               name='username'
+              id='username'
               {...register('username')}
               className='form-control mb-3'
             />
@@ -111,6 +114,7 @@ export default function SignUp() {
             <input
               type='password'
               name='password'
+              id='password'
               {...register('password')}
               className='form-control mb-3'
             />
@@ -120,6 +124,7 @@ export default function SignUp() {
             <input
               type='password'
               name='confirmPassword'
+              id='confirmPassword'
               {...register('confirmPassword')}
               className='form-control mb-3'
             />

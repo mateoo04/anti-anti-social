@@ -33,6 +33,11 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const forwardToLogIn = () => {
+    if (!window.location.href.endsWith('/auth/log-in'))
+      window.location.href = '/auth/log-in';
+  };
+
   useEffect(() => {
     const validateCredentials = async () => {
       if (!Cookies.get('username')) return;
@@ -43,7 +48,7 @@ export function AuthProvider({ children }) {
           credentials: 'include',
         });
 
-        if (response.status === 401) window.location.href = '/auth/log-in';
+        if (response.status === 401) forwardToLogIn();
         if (!response.ok) throw new Error('Failed to validate credentials');
 
         const json = await response.json();
@@ -51,9 +56,9 @@ export function AuthProvider({ children }) {
         if (json.success) {
           setIsAuthenticated(true);
           setAuthenticatedUser(json.user);
-        } else window.location.href = '/auth/log-in';
+        } else forwardToLogIn();
       } catch {
-        window.location.href = '/auth/log-in';
+        forwardToLogIn();
       }
     };
 

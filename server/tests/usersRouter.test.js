@@ -1,89 +1,26 @@
-const usersRouter = require('../routes/usersRouter');
-const authRouter = require('../routes/authRouter');
-const { passport } = require('../config/passport');
-const cookieParser = require('cookie-parser');
+require('dotenv').config({ path: '.env.test' });
 
+const usersRouter = require('../routes/usersRouter');
+const { passport } = require('../config/passport');
+const request = require('supertest');
 const { PrismaClient } = require('@prisma/client');
+const { getApp, createUser } = require('./utils/helpers');
+
 const prisma = new PrismaClient();
 
-const request = require('supertest');
-const express = require('express');
-const app = express();
+const app = getApp();
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(passport.initialize());
-app.use(cookieParser());
-
-app.use('/api/auth', authRouter);
 app.use(
   '/api/users',
   passport.authenticate('jwt', { session: false }),
   usersRouter
 );
 
-const createUser = async (username) => {
-  const response = await request(app)
-    .post('/api/auth/sign-up')
-    .set('Content-Type', 'application/json')
-    .send({
-      firstName: 'test',
-      lastName: 'test',
-      username,
-      password: 'Test1234',
-      confirmPassword: 'Test1234',
-    });
-
-  const cookies = response.headers['set-cookie'];
-
-  const authTokenCookie = cookies
-    .find((cookie) => cookie.startsWith('authToken='))
-    .split(';')[0];
-
-  return { user: response.body.user, authTokenCookie };
-};
-
-const deleteTestUsers = async () => {
-  await prisma.follows.deleteMany({
-    where: {
-      OR: [
-        {
-          follower: {
-            username: {
-              in: ['test_user_a', 'test_user_b'],
-            },
-          },
-        },
-        {
-          following: {
-            username: {
-              in: ['test_user_a', 'test_user_b'],
-            },
-          },
-        },
-      ],
-    },
-  });
-
-  await prisma.user.deleteMany({
-    where: {
-      username: {
-        in: ['test_user_a', 'test_user_b'],
-      },
-    },
-  });
-};
-
 let userA, userB;
 
 beforeAll(async () => {
-  await deleteTestUsers();
-  userA = await createUser('test_user_a');
-  userB = await createUser('test_user_b');
-});
-
-afterAll(async () => {
-  deleteTestUsers();
+  userA = await createUser();
+  userB = await createUser();
 });
 
 describe('Following tests', () => {
@@ -110,7 +47,6 @@ describe('Following tests', () => {
   });
 
   test('User A unfollows User B', async () => {
-    console.log(userA, userB);
     const response = await request(app)
       .delete(`/api/users/${userB.user.id}/unfollow`)
       .set('Content-Type', 'application/json')
@@ -154,7 +90,6 @@ describe('Following tests', () => {
   });
 
   test('User A removes User B from followers', async () => {
-    console.log(userA, userB);
     const response = await request(app)
       .delete(`/api/users/${userB.user.id}/remove-follower`)
       .set('Content-Type', 'application/json')

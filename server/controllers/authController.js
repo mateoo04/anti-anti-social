@@ -2,6 +2,7 @@ const { issueJWT } = require('../lib/utils');
 const bcrypt = require('bcryptjs');
 const { PrismaClient } = require('@prisma/client');
 const { validationResult } = require('express-validator');
+const { passport } = require('../config/passport');
 
 const prisma = new PrismaClient();
 
@@ -57,6 +58,15 @@ async function signUp(req, res, next) {
         username: req.body.username.toLowerCase(),
         password: hashedPassword,
       },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        profileImageUrl: true,
+        followers: true,
+        following: true,
+      },
     });
 
     respond(res, 201, user);
@@ -99,6 +109,8 @@ async function logIn(req, res, next) {
     const match = await bcrypt.compare(req.body.password, user.password);
 
     if (match) {
+      delete user['password'];
+
       respond(res, 200, {
         ...user,
         following: user.following.map(
@@ -120,35 +132,67 @@ async function logOut(req, res, next) {
   res.status(200).json({ success: true, message: 'Logged out' });
 }
 
-async function validateCredentials(req, res, next) {
-  const user = await prisma.user.findUnique({
-    where: {
-      id: req.user.id,
-    },
-    include: {
-      followers: {
-        select: {
-          followerId: true,
-        },
-      },
-      following: {
-        select: {
-          followingId: true,
-        },
-      },
-    },
-  });
+function authenticateJwt(req, res, next) {
+  passport.authenticate('jwt', { session: false }, (err, user, info) => {
+    if (err) return next(err);
 
-  return res.json({
-    success: true,
-    user: {
-      ...user,
-      following: user.following.map(
-        (followingUser) => followingUser.followingId
-      ),
-      followers: user.followers.map((followerUser) => followerUser.followerId),
-    },
-  });
+    if (!user) {
+      res.clearCookie('authToken', { httpOnly: true });
+      res.clearCookie('username', { httpOnly: false });
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    req.user = user;
+    next();
+  })(req, res, next);
 }
 
-module.exports = { signUp, logIn, logOut, validateCredentials };
+async function validateCredentials(req, res, next) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.id,
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        profileImageUrl: true,
+        followers: {
+          select: {
+            followerId: true,
+          },
+        },
+        following: {
+          select: {
+            followingId: true,
+          },
+        },
+      },
+    });
+
+    return res.json({
+      success: true,
+      user: {
+        ...user,
+        following: user.following.map(
+          (followingUser) => followingUser.followingId
+        ),
+        followers: user.followers.map(
+          (followerUser) => followerUser.followerId
+        ),
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = {
+  signUp,
+  logIn,
+  logOut,
+  authenticateJwt,
+  validateCredentials,
+};

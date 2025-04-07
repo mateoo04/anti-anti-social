@@ -76,6 +76,7 @@ export default function LogIn() {
             <input
               type='username'
               name='username'
+              id='username'
               {...register('username')}
               className='form-control mb-3'
             />
@@ -85,6 +86,7 @@ export default function LogIn() {
             <input
               type='password'
               name='password'
+              id='password'
               {...register('password')}
               className='form-control mb-3'
             />
