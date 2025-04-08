@@ -60,3 +60,16 @@ input[type='submit']:hover,
 .back-button {
   width: 28px;
 }
+
+.options button {
+  background-color: transparent;
+  border: 0;
+}
+
+.options button img {
+  width: 22px;
+}
+
+.like-icon {
+  margin-right: 6px;
+}

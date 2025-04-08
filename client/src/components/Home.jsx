@@ -47,7 +47,10 @@ export default function Home() {
                 username={post.author.username}
                 profilePhotoUrl={post.author.profilePhotoUrl}
                 dateTime={post.dateTime}
+                postId={post.id}
                 content={post.content}
+                initialLikeCount={post._count.likedBy}
+                initialIsLikedByAuthUser={post.likedByAuthUser}
               ></Post>
             );
           })}

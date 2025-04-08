@@ -23,7 +23,7 @@ export default function Profile() {
 
         setProfile(json);
       } catch {
-        toast.err('Failed to fetch the profile');
+        toast.error('Failed to fetch the profile');
       }
     };
 
@@ -75,7 +75,11 @@ export default function Profile() {
                     username={profile.username}
                     profilePhotoUrl={profile.profilePhotoUrl}
                     dateTime={post.dateTime}
+                    postId={post.id}
                     content={post.content}
+                    initialLikeCount={post._count?.likedBy}
+                    initialIsLikedByAuthUser={post.likedByAuthUser}
+                    key={'profile-posts-' + post.id}
                   ></Post>
                 );
               })}

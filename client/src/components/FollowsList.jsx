@@ -26,7 +26,7 @@ export default function FollowsList() {
 
         setProfile(json);
       } catch {
-        toast.err('Failed to fetch the profile');
+        toast.error('Failed to fetch the profile');
       }
     };
 

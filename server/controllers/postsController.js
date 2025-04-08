@@ -53,11 +53,11 @@ async function getPosts(req, res, next) {
       }),
     ]);
 
-    const likedByIds = likedBy.map((likedByItem) => likedByItem.id);
+    const likedByAuthUser = likedBy.map((likedByItem) => likedByItem.id);
 
     return res.json(
       posts.map((post) => {
-        if (likedByIds.includes(post.id))
+        if (likedByAuthUser.includes(post.id))
           return { ...post, likedByAuthUser: true };
         else return { ...post, likedByAuthUser: false };
       })

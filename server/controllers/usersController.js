@@ -56,7 +56,18 @@ async function getUserById(req, res, next) {
               follower: true,
             },
           },
-          posts: true,
+          posts: {
+            include: {
+              _count: {
+                select: {
+                  likedBy: true,
+                },
+              },
+            },
+            orderBy: {
+              dateTime: 'desc',
+            },
+          },
         },
       });
 
@@ -77,12 +88,43 @@ async function getUserById(req, res, next) {
               following: true,
             },
           },
-          posts: true,
+          posts: {
+            include: {
+              _count: {
+                select: {
+                  likedBy: true,
+                },
+              },
+            },
+            orderBy: {
+              dateTime: 'desc',
+            },
+          },
         },
       });
     }
 
-    return res.json(user);
+    let likedByAuthUser = await prisma.post.findMany({
+      where: {
+        authorId: id,
+        likedBy: {
+          some: {
+            id: req.user.id,
+          },
+        },
+      },
+    });
+
+    likedByAuthUser = likedByAuthUser.map((likedByItem) => likedByItem.id);
+
+    return res.json({
+      ...user,
+      posts: user.posts.map((post) => {
+        if (likedByAuthUser.includes(post.id))
+          return { ...post, likedByAuthUser: true };
+        else return { ...post, likedByAuthUser: false };
+      }),
+    });
   } catch (err) {
     next(err);
   }
