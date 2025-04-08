@@ -23,6 +23,7 @@ model User{
   following   Follows[]  @relation("FollowingRelation")
   followers   Follows[]  @relation("FollowersRelation")
   posts Post[]
+  likedPosts Post[] @relation("LikedPosts")
 }
 model Follows{
   followerId String
@@ -39,4 +40,5 @@ model Post{
   content String
   authorId String
   author User @relation(fields: [authorId], references: [id])
+  likedBy User[] @relation("LikedPosts")
 }

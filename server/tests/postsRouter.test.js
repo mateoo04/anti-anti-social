@@ -16,11 +16,13 @@ app.use(
   postsRouter
 );
 
-let userA, userB;
+let userA, userB, userC;
+let userAPost;
 
 beforeAll(async () => {
   userA = await createUser();
   userB = await createUser();
+  userC = await createUser();
 });
 
 describe('Post tests', () => {
@@ -31,13 +33,15 @@ describe('Post tests', () => {
       .set('Cookie', userA.authTokenCookie)
       .send({ content: 'Test post' });
 
-    expect(response.status).toBe(201);
+    expect(response.statusCode).toBe(201);
 
     const userAPosts = await prisma.post.findMany({
       where: {
         authorId: userA.user.id,
       },
     });
+
+    userAPost = userAPosts.at(0);
 
     expect(userAPosts).toHaveLength(1);
     expect(userAPosts.at(0).content).toBe('Test post');
@@ -56,11 +60,73 @@ describe('Post tests', () => {
       .set('Cookie', userB.authTokenCookie)
       .send();
 
-    expect(response.status).toBe(200);
+    expect(response.statusCode).toBe(200);
 
     const posts = response.body;
 
     expect(posts).toHaveLength(1);
     expect(posts.at(0).content).toBe('Test post');
+  });
+});
+
+describe('Liking a post', () => {
+  test('User B likes the post', async () => {
+    const response = await request(app)
+      .post(`/api/posts/${userAPost.id}/like`)
+      .set('Cookie', userB.authTokenCookie)
+      .send();
+
+    expect(response.statusCode).toBe(204);
+
+    const post = await prisma.post.findUnique({
+      where: {
+        id: userAPost.id,
+      },
+      include: {
+        likedBy: true,
+      },
+    });
+
+    expect(post.likedBy.length).toBe(1);
+  });
+
+  test('User C likes the post', async () => {
+    const response = await request(app)
+      .post(`/api/posts/${userAPost.id}/like`)
+      .set('Cookie', userC.authTokenCookie)
+      .send();
+
+    expect(response.statusCode).toBe(204);
+
+    const post = await prisma.post.findUnique({
+      where: {
+        id: userAPost.id,
+      },
+      include: {
+        likedBy: true,
+      },
+    });
+
+    expect(post.likedBy.length).toBe(2);
+  });
+
+  test('User C unlikes the post', async () => {
+    const response = await request(app)
+      .post(`/api/posts/${userAPost.id}/unlike`)
+      .set('Cookie', userC.authTokenCookie)
+      .send();
+
+    expect(response.statusCode).toBe(204);
+
+    const post = await prisma.post.findUnique({
+      where: {
+        id: userAPost.id,
+      },
+      include: {
+        likedBy: true,
+      },
+    });
+
+    expect(post.likedBy.length).toBe(1);
   });
 });
