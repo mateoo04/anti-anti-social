@@ -41,7 +41,7 @@ export default function Profile() {
               key={`profile-list-item-${profile.id}`}
             >
               <img
-                src={profile.profilePhotoUrl || personSvg}
+                src={profile.profileImageUrl || personSvg}
                 alt=''
                 className='main-profile-photo'
               />
@@ -70,10 +70,11 @@ export default function Profile() {
               {profile.posts?.map((post) => {
                 return (
                   <Post
+                    authorId={profile.id}
                     firstName={profile.firstName}
                     lastName={profile.lastName}
                     username={profile.username}
-                    profilePhotoUrl={profile.profilePhotoUrl}
+                    profileImageUrl={profile.profileImageUrl}
                     dateTime={post.dateTime}
                     postId={post.id}
                     content={post.content}

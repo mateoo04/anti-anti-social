@@ -73,3 +73,14 @@ input[type='submit']:hover,
 .like-icon {
   margin-right: 6px;
 }
+
+.post-comment-btn {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+}
+
+.post-comment-btn img {
+  width: 20px;
+  height: 20px;
+}

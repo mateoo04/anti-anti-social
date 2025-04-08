@@ -40,9 +40,20 @@ async function addComment(req, res, next) {
         content,
         authorId: req.user.id,
       },
+      include: {
+        author: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            profileImageUrl: true,
+          },
+        },
+      },
     });
 
-    return res.status(204).send();
+    return res.status(201).send(comment);
   } catch (err) {
     next(err);
   }

@@ -138,7 +138,7 @@ describe('Commenting the post', () => {
       .set('Cookie', userB.authTokenCookie)
       .send({ content: 'Test comment' });
 
-    expect(response.statusCode).toBe(204);
+    expect(response.statusCode).toBe(201);
 
     const commentsOnUserAPost = await prisma.comment.findMany({
       where: {

@@ -9,7 +9,7 @@ export default function PostEditor() {
 
   const uploadPost = async () => {
     try {
-      await fetch('/api/posts/new', {
+      const response = await fetch('/api/posts/new', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -17,6 +17,8 @@ export default function PostEditor() {
         },
         body: JSON.stringify({ content }),
       });
+
+      if (!response.ok) throw new Error('Failed to post');
 
       navigate('/');
     } catch {

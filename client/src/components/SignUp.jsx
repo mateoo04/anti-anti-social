@@ -115,6 +115,7 @@ export default function SignUp() {
               type='password'
               name='password'
               id='password'
+              autocomplete='new-password'
               {...register('password')}
               className='form-control mb-3'
             />
@@ -125,6 +126,7 @@ export default function SignUp() {
               type='password'
               name='confirmPassword'
               id='confirmPassword'
+              autocomplete='new-password'
               {...register('confirmPassword')}
               className='form-control mb-3'
             />
