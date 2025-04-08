@@ -7,6 +7,7 @@ import formatDateTime from '../../lib/utils';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Comment from './Comment';
 
 export default function Post({
   firstName,
@@ -61,6 +62,11 @@ export default function Post({
   };
 
   const postComment = async () => {
+    if (newCommentText.length < 1 || newCommentText.length > 200) {
+      toast.error('Comment must be between 1 and 200 characters long.');
+      return;
+    }
+
     try {
       const response = await fetch(`/api/posts/${postId}/comments`, {
         method: 'POST',
@@ -76,7 +82,10 @@ export default function Post({
       const json = await response.json();
 
       setNewCommentText('');
-      setComments((prev) => [...prev, json]);
+      setComments((prev) => [
+        ...prev,
+        { ...json, _count: { likedBy: 0 }, likedByAuthUser: false },
+      ]);
     } catch {
       toast.error('Failed to post the comment');
     }
@@ -96,6 +105,62 @@ export default function Post({
       setComments(json);
     } catch {
       toast.error('Failed to load the comments');
+    }
+  };
+
+  const likeComment = async (commentId) => {
+    try {
+      const response = await fetch(
+        `/api/posts/${postId}/comments/${commentId}/like`,
+        {
+          method: 'POST',
+          credentials: 'include',
+        }
+      );
+
+      if (!response.ok) throw new Error('Failed to like the comment');
+
+      setComments((prev) =>
+        prev.map((item) => {
+          if (item.id === commentId)
+            return {
+              ...item,
+              likedByAuthUser: true,
+              _count: { likedBy: item._count.likedBy + 1 },
+            };
+          return item;
+        })
+      );
+    } catch {
+      toast.error('Failed to like the comment');
+    }
+  };
+
+  const unlikeComment = async (commentId) => {
+    try {
+      const response = await fetch(
+        `/api/posts/${postId}/comments/${commentId}/unlike`,
+        {
+          method: 'POST',
+          credentials: 'include',
+        }
+      );
+
+      if (!response.ok) throw new Error('Failed to unlike the comment');
+
+      setComments((prev) =>
+        prev.map((item) => {
+          if (item.id === commentId)
+            return {
+              ...item,
+              likedByAuthUser: false,
+              _count: { likedBy: item._count.likedBy - 1 },
+            };
+          return item;
+        })
+      );
+    } catch {
+      toast.error('Failed to unlike the comment');
     }
   };
 
@@ -128,7 +193,7 @@ export default function Post({
         <button
           onClick={() => {
             setShowComments((prev) => !prev);
-            fetchComments();
+            if (!showComments) fetchComments();
           }}
         >
           <img src={chatSvg} alt='Comments icon' />
@@ -165,28 +230,12 @@ export default function Post({
         </form>
         {comments.map((comment) => {
           return (
-            <div className='mt-2 mb-2 ps-2 pe-2'>
-              <Link
-                to={`/user/${comment.authorId}`}
-                className='text-decoration-none d-flex justify-content-between align-items-start'
-              >
-                <div className='details d-flex gap-3 mb-3 align-items-center'>
-                  <img
-                    src={comment.author.profileImageUrl || personSvg}
-                    alt=''
-                    className='profile-photo-md'
-                  />
-                  <div className='d-flex flex-column'>
-                    <h2 className='mb-0 h4'>
-                      {comment.author.firstName + ' ' + comment.author.lastName}
-                    </h2>
-                    <p className='text-muted'>{comment.author.username}</p>
-                  </div>
-                </div>
-                <p className='text-muted'>{formatDateTime(comment.dateTime)}</p>
-              </Link>
-              <p>{comment.content}</p>
-            </div>
+            <Comment
+              key={`comment-${comment.id}`}
+              likeComment={likeComment}
+              unlikeComment={unlikeComment}
+              comment={comment}
+            />
           );
         })}
       </div>

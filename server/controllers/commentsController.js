@@ -6,24 +6,49 @@ async function getComments(req, res, next) {
   try {
     const postId = req.params.postId;
 
-    const comments = await prisma.comment.findMany({
-      where: {
-        postId,
-      },
-      include: {
-        author: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            username: true,
-            profileImageUrl: true,
+    const [comments, likedByAuthUser] = await Promise.all([
+      prisma.comment.findMany({
+        where: {
+          postId,
+        },
+        include: {
+          author: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profileImageUrl: true,
+            },
+          },
+          _count: {
+            select: {
+              likedBy: true,
+            },
           },
         },
-      },
-    });
+      }),
+      prisma.comment.findMany({
+        where: {
+          postId,
+          likedBy: {
+            some: {
+              id: req.user.id,
+            },
+          },
+        },
+      }),
+    ]);
 
-    return res.json(comments);
+    const likedByAuthUserIds = likedByAuthUser.map((item) => item.id);
+
+    return res.json(
+      comments.map((comment) => {
+        if (likedByAuthUserIds.includes(comment.id))
+          return { ...comment, likedByAuthUser: true };
+        else return { ...comment, likedByAuthUser: false };
+      })
+    );
   } catch (err) {
     next(err);
   }
@@ -75,4 +100,56 @@ async function deleteComment(req, res, next) {
   }
 }
 
-module.exports = { getComments, addComment, deleteComment };
+async function likeComment(req, res, next) {
+  try {
+    const commentId = req.params.commentId;
+
+    const likedComment = await prisma.comment.update({
+      where: {
+        id: commentId,
+      },
+      data: {
+        likedBy: {
+          connect: {
+            id: req.user.id,
+          },
+        },
+      },
+    });
+
+    return res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function unlikeComment(req, res, next) {
+  try {
+    const commentId = req.params.commentId;
+
+    const unlikedComment = await prisma.comment.update({
+      where: {
+        id: commentId,
+      },
+      data: {
+        likedBy: {
+          disconnect: {
+            id: req.user.id,
+          },
+        },
+      },
+    });
+
+    return res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = {
+  getComments,
+  addComment,
+  deleteComment,
+  likeComment,
+  unlikeComment,
+};

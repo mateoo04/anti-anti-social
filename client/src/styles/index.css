@@ -9,6 +9,12 @@ body {
   margin: 0;
 }
 
+p {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
 .auth-logo {
   width: 250px;
   margin-top: 20px;
@@ -29,6 +35,14 @@ body {
 
 .profile-photo-md {
   height: 40px;
+}
+
+.profile-photo-sm {
+  height: 30px;
+}
+
+.comment-content {
+  padding-left: 40px;
 }
 
 p {
@@ -70,8 +84,13 @@ input[type='submit']:hover,
   width: 22px;
 }
 
-.like-icon {
+.like-icon,
+.like-icon-comment {
   margin-right: 6px;
+}
+
+.like-icon-comment {
+  width: 18px;
 }
 
 .post-comment-btn {

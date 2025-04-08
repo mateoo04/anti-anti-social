@@ -4,10 +4,15 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
 export default function PostEditor() {
-  const [content, setContent] = useState({});
+  const [content, setContent] = useState('');
   const navigate = useNavigate();
 
   const uploadPost = async () => {
+    if (content.length < 1 || content.length > 320) {
+      toast.error('Post text must be between 1 and 320 characters long.');
+      return;
+    }
+
     try {
       const response = await fetch('/api/posts/new', {
         method: 'POST',

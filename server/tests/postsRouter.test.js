@@ -18,6 +18,7 @@ app.use(
 
 let userA, userB, userC;
 let userAPost;
+let userCComment;
 
 beforeAll(async () => {
   userA = await createUser();
@@ -157,7 +158,50 @@ describe('Commenting the post', () => {
       .send();
 
     expect(response.statusCode).toBe(200);
-
     expect(response.body.length).toBe(1);
+
+    userCComment = response.body.at(0);
+  });
+});
+
+describe('Liking a comment', () => {
+  test("User B likes User C's comment", async () => {
+    const response = await request(app)
+      .post(`/api/posts/${userAPost.id}/comments/${userCComment.id}/like`)
+      .set('Cookie', userB.authTokenCookie)
+      .send();
+
+    expect(response.statusCode).toBe(204);
+
+    const comment = await prisma.comment.findUnique({
+      where: {
+        id: userCComment.id,
+      },
+      include: {
+        likedBy: true,
+      },
+    });
+
+    expect(comment.likedBy.length).toBe(1);
+  });
+
+  test("User B unlikes User C's comment", async () => {
+    const response = await request(app)
+      .post(`/api/posts/${userAPost.id}/comments/${userCComment.id}/unlike`)
+      .set('Cookie', userB.authTokenCookie)
+      .send();
+
+    expect(response.statusCode).toBe(204);
+
+    const comment = await prisma.comment.findUnique({
+      where: {
+        id: userCComment.id,
+      },
+      include: {
+        likedBy: true,
+      },
+    });
+
+    expect(comment.likedBy.length).toBe(0);
   });
 });
