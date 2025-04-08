@@ -6,6 +6,7 @@ const {
   likePost,
   unlikePost,
 } = require('../controllers/postsController');
+const commentsRouter = require('./commentsRouter');
 
 const postsRouter = Router();
 
@@ -17,5 +18,7 @@ postsRouter.post('/new', createNewPost);
 
 postsRouter.post('/:postId/like', likePost);
 postsRouter.post('/:postId/unlike', unlikePost);
+
+postsRouter.use('/:postId/comments', commentsRouter);
 
 module.exports = postsRouter;

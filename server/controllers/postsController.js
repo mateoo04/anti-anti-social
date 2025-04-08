@@ -171,4 +171,10 @@ async function unlikePost(req, res, next) {
   }
 }
 
-module.exports = { createNewPost, getPostById, getPosts, likePost, unlikePost };
+module.exports = {
+  createNewPost,
+  getPostById,
+  getPosts,
+  likePost,
+  unlikePost,
+};

@@ -130,3 +130,34 @@ describe('Liking a post', () => {
     expect(post.likedBy.length).toBe(1);
   });
 });
+
+describe('Commenting the post', () => {
+  test('User C comments on the post', async () => {
+    const response = await request(app)
+      .post(`/api/posts/${userAPost.id}/comments`)
+      .set('Cookie', userB.authTokenCookie)
+      .send({ content: 'Test comment' });
+
+    expect(response.statusCode).toBe(204);
+
+    const commentsOnUserAPost = await prisma.comment.findMany({
+      where: {
+        postId: userAPost.id,
+      },
+    });
+
+    expect(commentsOnUserAPost.length).toBe(1);
+    expect(commentsOnUserAPost.at(0).content).toBe('Test comment');
+  });
+
+  test('Returns the comments for the post', async () => {
+    const response = await request(app)
+      .get(`/api/posts/${userAPost.id}/comments`)
+      .set('Cookie', userB.authTokenCookie)
+      .send();
+
+    expect(response.statusCode).toBe(200);
+
+    expect(response.body.length).toBe(1);
+  });
+});
