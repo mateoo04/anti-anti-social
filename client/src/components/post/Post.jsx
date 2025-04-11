@@ -3,7 +3,7 @@ import heartSvg from '../../assets/icons/heart.svg';
 import heartFillSvg from '../../assets/icons/heart-fill.svg';
 import chatSvg from '../../assets/icons/chat.svg';
 import sendSvg from '../../assets/icons/send.svg';
-import formatDateTime from '../../lib/utils';
+import formatDateTime from '../../utils/helpers';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';

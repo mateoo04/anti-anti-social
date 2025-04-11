@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import personSvg from '../assets/icons/person-circle.svg';
-import Header from './partials/Header';
-import Post from './partials/Post';
+import personSvg from '../../assets/icons/person-circle.svg';
+import Header from '../layout/Header';
+import Post from '../post/Post';
 
 export default function Profile() {
   const { userId } = useParams();

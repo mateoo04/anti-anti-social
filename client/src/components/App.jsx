@@ -1,15 +1,15 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import LogIn from './LogIn';
-import SignUp from './SignUp';
+import LogIn from './authentication/LogIn';
+import SignUp from './authentication/SignUp';
 import { AuthProvider } from '../context/authContext';
 import { Slide, ToastContainer } from 'react-toastify';
 import NotFound from './NotFound';
 import Home from './Home';
 import Search from './Search';
-import Profile from './Profile';
+import Profile from './profile/Profile';
 import ProtectedRoute from './ProtectedRoute';
-import FollowsList from './FollowsList';
-import PostEditor from './PostEditor';
+import FollowsList from './profile/FollowsList';
+import EditPost from './post/EditPost';
 
 const router = createBrowserRouter([
   {
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
     path: '/posts/new',
     element: (
       <ProtectedRoute>
-        <PostEditor />
+        <EditPost />
       </ProtectedRoute>
     ),
   },

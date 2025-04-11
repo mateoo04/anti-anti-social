@@ -1,7 +1,7 @@
 import heartSvg from '../../assets/icons/heart.svg';
 import heartFillSvg from '../../assets/icons/heart-fill.svg';
 import personSvg from '../../assets/icons/person-circle.svg';
-import formatDateTime from '../../lib/utils';
+import formatDateTime from '../../utils/helpers';
 import { Link } from 'react-router-dom';
 
 export default function Comment({ comment, likeComment, unlikeComment }) {

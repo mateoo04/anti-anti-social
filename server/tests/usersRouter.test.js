@@ -23,6 +23,29 @@ beforeAll(async () => {
   userB = await createUser();
 });
 
+describe('User account tests', () => {
+  test('User B changes their last name', async () => {
+    const response = await request(app)
+      .put(`/api/users/`)
+      .set('Content-Type', 'application/json')
+      .set('Cookie', userB.authTokenCookie)
+      .send({ lastName: 'Testovious' });
+
+    expect(response.status).toBe(200);
+
+    const updatedUserB = await prisma.user.findUnique({
+      where: {
+        id: userB.user.id,
+      },
+      select: {
+        lastName: true,
+      },
+    });
+
+    expect(updatedUserB.lastName).toBe('Testovious');
+  });
+});
+
 describe('Following tests', () => {
   test('User A follows User B', async () => {
     const response = await request(app)

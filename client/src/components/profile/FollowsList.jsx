@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Header from './partials/Header';
-import ProfilesList from './partials/ProfilesList';
-import arrowLeft from '../assets/icons/arrow-left.svg';
+import Header from '../layout/Header';
+import ProfilesList from '../profile/ProfilesList';
+import arrowLeft from '../../assets/icons/arrow-left.svg';
 
 export default function FollowsList() {
   const { userId } = useParams();

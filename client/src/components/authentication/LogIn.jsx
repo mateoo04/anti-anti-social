@@ -3,8 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAuth } from '../context/authContext.jsx';
-import logo from '../assets/logo.png';
+import { useAuth } from '../../context/authContext';
+import logo from '../../assets/logo.png';
 
 const logInSchema = z.object({
   username: z.string().min(2, 'Username must be at least 2 characters long'),

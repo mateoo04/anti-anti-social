@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import Header from './partials/Header';
+import Header from './layout/Header';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import Post from './partials/Post';
+import Post from './post/Post';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);

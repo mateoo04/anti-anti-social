@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import ProfilesList from './partials/ProfilesList';
+import ProfilesList from './profile/ProfilesList';
 import { useAuth } from '../context/authContext';
-import Header from './partials/Header';
+import Header from './layout/Header';
 
 export default function Search() {
   const { authenticatedUser, setAuthenticatedUser } = useAuth();

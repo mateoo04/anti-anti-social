@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import Header from './partials/Header';
+import Header from './../layout/Header';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
-export default function PostEditor() {
+export default function EditPost() {
   const [content, setContent] = useState('');
   const navigate = useNavigate();
 

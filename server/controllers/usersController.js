@@ -228,10 +228,52 @@ async function removeFollower(req, res, next) {
   }
 }
 
+async function updateUserProfile(req, res, next) {
+  try {
+    const { firstName, lastName, username, profileImageUrl } = req.body;
+
+    let usernameTaken;
+
+    if (username)
+      usernameTaken = await prisma.user.findFirst({
+        where: {
+          username,
+        },
+      });
+
+    if (username && usernameTaken)
+      return res.status(409).json({ message: 'Username is not available.' });
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: req.user.id,
+      },
+      data: {
+        firstName: firstName || undefined,
+        lastName: lastName || undefined,
+        username: username || undefined,
+        profileImageUrl: profileImageUrl || undefined,
+      },
+      select: {
+        firstName: true,
+        lastName: true,
+        username: true,
+        id: true,
+        profileImageUrl: true,
+      },
+    });
+
+    return res.json(updatedUser);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getAllUsers,
   getUserById,
   followUser,
   unfollowUser,
   removeFollower,
+  updateUserProfile,
 };
