@@ -27,6 +27,11 @@ async function getComments(req, res, next) {
             },
           },
         },
+        orderBy: {
+          likedBy: {
+            _count: 'desc',
+          },
+        },
       }),
       prisma.comment.findMany({
         where: {

@@ -82,6 +82,14 @@ export default function Profile() {
                     initialLikeCount={post._count?.likedBy}
                     initialIsLikedByAuthUser={post.likedByAuthUser}
                     key={'profile-posts-' + post.id}
+                    removePost={() =>
+                      setProfile((prev) => ({
+                        ...prev,
+                        posts: prev.posts.filter(
+                          (postItem) => postItem.id !== post.id
+                        ),
+                      }))
+                    }
                   ></Post>
                 );
               })}

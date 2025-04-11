@@ -4,9 +4,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import supabase from '../../utils/supabase';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Header from '../layout/Header';
 import { useNavigate } from 'react-router-dom';
+import personSvg from '../../assets/icons/person-circle.svg';
 
 const editUserSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters long'),
@@ -34,6 +35,7 @@ const editUserSchema = z.object({
 export default function EditProfile() {
   const { authenticatedUser, setAuthenticatedUser } = useAuth();
   const navigate = useNavigate();
+  const photoRef = useRef();
 
   const {
     register,
@@ -104,6 +106,11 @@ export default function EditProfile() {
         body: JSON.stringify(updatedFields),
       });
 
+      if (response.status === 409) {
+        toast.error('Username is taken. Please choose another.');
+        return;
+      }
+
       if (!response.ok) throw new Error('Failed to save changes');
 
       const json = await response.json();
@@ -113,6 +120,16 @@ export default function EditProfile() {
     } catch (err) {
       console.error(err);
       toast.error('Failed to save changes');
+    }
+  };
+
+  const setSelectedPhoto = (selectedPhoto) => {
+    if (selectedPhoto && photoRef.current) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        photoRef.current.src = e.target.result;
+      };
+      reader.readAsDataURL(selectedPhoto);
     }
   };
 
@@ -136,6 +153,27 @@ export default function EditProfile() {
           className='d-flex flex-column p-3'
         >
           <legend>Edit profile</legend>
+          <div className='d-flex gap-3 pt-3 pb-3'>
+            <img
+              src={authenticatedUser.profileImageUrl || personSvg}
+              alt=''
+              ref={photoRef}
+              className='profile-photo-lg'
+            />
+            <label htmlFor='file-input' className='mb-3'>
+              New profile photo
+              <input
+                id='file-input'
+                type='file'
+                name='file'
+                className='form-control mb-3'
+                {...register('file')}
+                onChange={(e) => {
+                  setSelectedPhoto(e.target.files[0]);
+                }}
+              />
+            </label>
+          </div>
           <label htmlFor='firstName'>
             First name
             <input
@@ -164,16 +202,6 @@ export default function EditProfile() {
               id='username'
               {...register('username')}
               className='form-control mb-3'
-            />
-          </label>
-          <label htmlFor='file' className='mb-3'>
-            New profile photo
-            <input
-              id='file-input'
-              type='file'
-              name='file'
-              className='form-control mb-3'
-              {...register('file')}
             />
           </label>
           <input

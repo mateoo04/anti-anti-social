@@ -117,4 +117,26 @@ input[type='submit']:hover,
 .post-photo,
 .post-photo-container {
   max-width: 100%;
+  max-height: 500px;
+  min-width: 100px;
+  min-height: 100px;
+}
+
+.comment-image {
+  margin-bottom: 2px;
+}
+
+.uploaded-image {
+  max-width: 150px;
+  max-height: 150px;
+  min-width: 50px;
+  min-height: 50px;
+}
+
+.uploaded-image-container {
+  height: 150px;
+}
+
+img {
+  object-fit: cover;
 }

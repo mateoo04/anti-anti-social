@@ -52,20 +52,26 @@ export default function Header() {
             </button>
             <ul className='dropdown-menu dropdown-menu-light mt-2'>
               <li className='dropdown-item'>
-                <Link
-                  to={authenticatedUser ? `/user/${authenticatedUser.id}` : '/'}
-                  className='text-decoration-none text-black'
+                <button
+                  onClick={() =>
+                    navigate(
+                      authenticatedUser ? `/user/${authenticatedUser.id}` : '/'
+                    )
+                  }
+                  className='btn p-0 text-black'
                 >
                   View profile
-                </Link>
+                </button>
               </li>
               <li className='dropdown-item'>
-                <Link
-                  to={authenticatedUser ? `/edit-profile` : '/'}
-                  className='text-decoration-none text-black'
+                <button
+                  onClick={() =>
+                    navigate(authenticatedUser ? `/edit-profile` : '/')
+                  }
+                  className='btn p-0 text-black'
                 >
                   Edit profile
-                </Link>
+                </button>
               </li>
               <li className='dropdown-item'>
                 <button

@@ -170,10 +170,69 @@ async function unlikePost(req, res, next) {
   }
 }
 
+async function deletePost(req, res, next) {
+  try {
+    const postId = req.params.postId;
+
+    validatePostAuthor(req, res, postId);
+
+    await prisma.comment.deleteMany({
+      where: {
+        postId,
+      },
+    });
+
+    await prisma.post.delete({
+      where: {
+        id: postId,
+      },
+    });
+
+    res.json({ message: 'Post deleted' });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function updatePost(req, res, next) {
+  try {
+    const postId = req.params.postId;
+
+    validatePostAuthor(req, res, postId);
+
+    const updatedPost = await prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        content: req.body.content || undefined,
+        photoUrl: req.body.photoUrl || undefined,
+      },
+    });
+
+    return res.json(updatedPost);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function validatePostAuthor(req, res, postId) {
+  const isAuthor = await prisma.post.findFirst({
+    where: {
+      id: postId,
+      authorId: req.user.id,
+    },
+  });
+
+  if (!isAuthor) res.status(403);
+}
+
 module.exports = {
   createNewPost,
   getPostById,
   getPosts,
   likePost,
   unlikePost,
+  deletePost,
+  updatePost,
 };

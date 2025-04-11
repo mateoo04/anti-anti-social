@@ -3,11 +3,13 @@ import heartSvg from '../../assets/icons/heart.svg';
 import heartFillSvg from '../../assets/icons/heart-fill.svg';
 import chatSvg from '../../assets/icons/chat.svg';
 import sendSvg from '../../assets/icons/send.svg';
+import threeDotsSvg from '../../assets/icons/three-dots.svg';
 import formatDateTime from '../../utils/helpers';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Comment from './Comment';
+import { useAuth } from '../../context/authContext';
 
 export default function Post({
   firstName,
@@ -21,7 +23,9 @@ export default function Post({
   dateTime,
   initialLikeCount,
   initialIsLikedByAuthUser,
+  removePost,
 }) {
+  const { authenticatedUser } = useAuth();
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLikedByAuthUser, setIsLikedByAuthUser] = useState(
     initialIsLikedByAuthUser
@@ -29,6 +33,7 @@ export default function Post({
   const [showComments, setShowComments] = useState(false);
   const [newCommentText, setNewCommentText] = useState('');
   const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
 
   const likePost = async () => {
     try {
@@ -84,8 +89,8 @@ export default function Post({
 
       setNewCommentText('');
       setComments((prev) => [
-        ...prev,
         { ...json, _count: { likedBy: 0 }, likedByAuthUser: false },
+        ...prev,
       ]);
     } catch {
       toast.error('Failed to post the comment');
@@ -165,6 +170,20 @@ export default function Post({
     }
   };
 
+  const handlePostDelete = async () => {
+    try {
+      const response = await fetch(`/api/posts/${postId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete the post');
+
+      removePost();
+    } catch {
+      toast.error('Failed to delete the post');
+    }
+  };
   return (
     <div className='border rounded-4 pt-4 ps-4 pe-4 pb-3'>
       <Link to={`/user/${authorId}`} className='text-decoration-none'>
@@ -187,7 +206,7 @@ export default function Post({
         </div>
       )}
       <p className='text-muted pt-3'>{formatDateTime(dateTime)}</p>
-      <div className='options pt-1 mb-2'>
+      <div className='options pt-1 mb-2 d-flex align-items-center'>
         <button onClick={isLikedByAuthUser ? unlikePost : likePost}>
           <img
             src={isLikedByAuthUser ? heartFillSvg : heartSvg}
@@ -202,8 +221,39 @@ export default function Post({
             if (!showComments) fetchComments();
           }}
         >
-          <img src={chatSvg} alt='Comments icon' />
+          <img src={chatSvg} alt='Comments icon' className='comment-image' />
         </button>
+        {authorId === authenticatedUser.id && (
+          <div className='dropdown'>
+            <button
+              className='d-flex align-items-center gap-1 text-decoration-none text-black bg-transparent border-0'
+              data-bs-toggle='dropdown'
+            >
+              <img src={threeDotsSvg} alt='' />
+            </button>
+            <ul className='dropdown-menu dropdown-menu-light mt-2'>
+              <li className='dropdown-item'>
+                <button
+                  onClick={() => {
+                    confirm('Are you sure you want to delete this post?') &&
+                      handlePostDelete();
+                  }}
+                  className='p-0 text-muted'
+                >
+                  Delete post
+                </button>
+              </li>
+              <li className='dropdown-item'>
+                <button
+                  className='text-decoration-none text-primary bg-transparent border-0 p-0'
+                  onClick={() => navigate(`/posts/${postId}/edit`)}
+                >
+                  Edit post
+                </button>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
 
       <div

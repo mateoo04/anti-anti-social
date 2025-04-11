@@ -205,3 +205,39 @@ describe('Liking a comment', () => {
     expect(comment.likedBy.length).toBe(0);
   });
 });
+
+describe('Post actions', () => {
+  test('User A updates their post', async () => {
+    const response = await request(app)
+      .put(`/api/posts/${userAPost.id}`)
+      .set('Cookie', userA.authTokenCookie)
+      .send({ content: 'Updated' });
+
+    expect(response.statusCode).toBe(200);
+
+    const post = await prisma.post.findUnique({
+      where: {
+        id: userAPost.id,
+      },
+    });
+
+    expect(post.content).toBe('Updated');
+  });
+
+  test('User A deletes their post', async () => {
+    const response = await request(app)
+      .delete(`/api/posts/${userAPost.id}`)
+      .set('Cookie', userA.authTokenCookie)
+      .send();
+
+    expect(response.statusCode).toBe(200);
+
+    const post = await prisma.post.findFirst({
+      where: {
+        id: userAPost.id,
+      },
+    });
+
+    expect(post).toBe(null);
+  });
+});

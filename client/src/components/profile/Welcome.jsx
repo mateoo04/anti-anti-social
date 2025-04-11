@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useAuth } from '../../context/authContext';
 import Header from '../layout/Header';
 import { toast } from 'react-toastify';
 import supabase from '../../utils/supabase';
 import { useNavigate } from 'react-router-dom';
+import personSvg from '../../assets/icons/person-circle.svg';
 
 export default function Welcome() {
   const { authenticatedUser, setAuthenticatedUser } = useAuth();
   const navigate = useNavigate();
   const [file, setFile] = useState();
+  const photoRef = useRef();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,6 +67,15 @@ export default function Welcome() {
     setAuthenticatedUser((prev) => ({ ...prev, ...json }));
     navigate(`/user/${authenticatedUser.id}`);
   };
+  const setSelectedPhoto = (selectedPhoto) => {
+    if (selectedPhoto && photoRef.current) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        photoRef.current.src = e.target.result;
+      };
+      reader.readAsDataURL(selectedPhoto);
+    }
+  };
 
   return (
     <>
@@ -79,15 +90,26 @@ export default function Welcome() {
         >
           <legend>One more step, upload a profile picture:</legend>
           <div className='d-flex gap-3 align-items-center'>
-            <label htmlFor='file'>
-              <input
-                id='file-input'
-                type='file'
-                name='file'
-                className='form-control'
-                onChange={(e) => setFile(e.target.files[0])}
+            <div className='d-flex align-items-center gap-3 pt-3 pb-3'>
+              <img
+                src={authenticatedUser.profileImageUrl || personSvg}
+                alt=''
+                ref={photoRef}
+                className='profile-photo-lg'
               />
-            </label>
+              <label htmlFor='file'>
+                <input
+                  id='file-input'
+                  type='file'
+                  name='file'
+                  className='form-control'
+                  onChange={(e) => {
+                    setFile(e.target.files[0]);
+                    setSelectedPhoto(e.target.files[0]);
+                  }}
+                />
+              </label>
+            </div>
             <input
               type='submit'
               value='SAVE'

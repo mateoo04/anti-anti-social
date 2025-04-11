@@ -73,10 +73,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '*',
+    path: '/posts/:postId/edit',
     element: (
       <ProtectedRoute>
-        <NotFound />
+        <EditPost />
       </ProtectedRoute>
     ),
   },
