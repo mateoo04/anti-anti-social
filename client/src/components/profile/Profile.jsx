@@ -34,7 +34,7 @@ export default function Profile() {
     <>
       <Header></Header>
       <main className='container'>
-        {profile ? (
+        {Object.keys(profile).length ? (
           <>
             <div
               className='details d-flex gap-3 mb-3'
@@ -52,6 +52,7 @@ export default function Profile() {
                 <p className='text-muted'>{profile.username}</p>
               </div>
             </div>
+            <p className='mb-2 preserve-newlines'>{profile.bio}</p>
             <div className='follow-stats d-flex gap-3'>
               <Link
                 to={`/user/${userId}/follows`}
@@ -96,7 +97,9 @@ export default function Profile() {
             </div>
           </>
         ) : (
-          'Loading...'
+          <div className='loader-container'>
+            <span className='loader'></span>
+          </div>
         )}
       </main>
     </>

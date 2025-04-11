@@ -39,7 +39,15 @@ async function getUserById(req, res, next) {
         where: {
           id,
         },
-        include: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          username: true,
+          bio: true,
+          profileImageUrl: true,
+          followers: true,
+          following: true,
           _count: {
             select: {
               followers: true,
@@ -251,11 +259,13 @@ async function updateUserProfile(req, res, next) {
         lastName: req.body.lastName || undefined,
         username: req.body.username || undefined,
         profileImageUrl: req.body.profileImageUrl || undefined,
+        bio: req.body.bio || undefined,
       },
       select: {
         firstName: true,
         lastName: true,
         username: true,
+        bio: true,
         id: true,
         profileImageUrl: true,
       },

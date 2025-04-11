@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import xSvg from '../../assets/icons/x-circle.svg';
 import imageSvg from '../../assets/icons/image.svg';
-import supabase from '../../utils/supabase';
+import supabase, { uploadPhoto } from '../../utils/supabase';
 import { useAuth } from '../../context/authContext';
 
 export default function EditPost() {
@@ -41,45 +41,6 @@ export default function EditPost() {
     if (postId) fetchPost();
   }, [postId]);
 
-  const uploadImage = async () => {
-    if (isAddingPhoto && file) {
-      if (
-        ![
-          'image/jpeg',
-          'image/png',
-          'image/gif',
-          'image/webp',
-          'image/svg+xml',
-        ].includes(file.type)
-      ) {
-        toast.error(
-          'Invalid file format! Please upload a JPG, PNG, GIF, WebP or SVG.'
-        );
-        return { invalid: true };
-      }
-
-      const filePath = `post-photos/${authenticatedUser.id}-${Date.now()}`;
-
-      const { data, error } = await supabase.storage
-        .from('anti-anti-social')
-        .upload(filePath, file, {
-          upsert: true,
-        });
-
-      if (error) {
-        throw new Error(error);
-      }
-
-      const { data: photoUrlData } = supabase.storage
-        .from('anti-anti-social')
-        .getPublicUrl(data.path);
-
-      return photoUrlData.publicUrl;
-    }
-
-    return undefined;
-  };
-
   const uploadPost = async () => {
     if (content.length < 1 || content.length > 320) {
       toast.error('Post text must be between 1 and 320 characters long.');
@@ -87,8 +48,16 @@ export default function EditPost() {
     }
 
     try {
-      let photoUrl = await uploadImage();
-      if (photoUrl?.invalid) return;
+      const uploadObj = { content };
+
+      if (file && isAddingPhoto) {
+        let photoUrlResult = await uploadPhoto(
+          file,
+          `post-photos/${authenticatedUser.id}-${Date.now()}`
+        );
+        if (photoUrlResult?.invalid) return;
+        else uploadObj.photoUrl = photoUrlResult;
+      }
 
       const response = await fetch('/api/posts/new', {
         method: 'POST',
@@ -96,7 +65,7 @@ export default function EditPost() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content, photoUrl }),
+        body: JSON.stringify(uploadObj),
       });
 
       if (!response.ok) throw new Error('Failed to post');
@@ -114,11 +83,15 @@ export default function EditPost() {
     }
 
     try {
-      let updateObj = { content };
-      if (file) {
-        const photoUrl = await uploadImage();
-        if (photoUrl?.invalid) return;
-        else updateObj.photoUrl = photoUrl;
+      const updateObj = { content };
+
+      if (file && isAddingPhoto) {
+        let photoUrlResult = await uploadPhoto(
+          file,
+          `post-photos/${authenticatedUser.id}-${Date.now()}`
+        );
+        if (photoUrlResult?.invalid) return;
+        else updateObj.photoUrl = photoUrlResult;
       }
 
       const response = await fetch(`/api/posts/${postId}`, {

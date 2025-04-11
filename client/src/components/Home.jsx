@@ -6,6 +6,7 @@ import Post from './post/Post';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -20,6 +21,7 @@ export default function Home() {
         const json = await response.json();
 
         setPosts(json);
+        setIsLoading(false);
       } catch {
         toast.error('Failed to load posts');
       }
@@ -58,6 +60,10 @@ export default function Home() {
                 ></Post>
               );
             })
+          ) : isLoading ? (
+            <div className='loader-container'>
+              <span className='loader'></span>
+            </div>
           ) : (
             <p className='text-center'>
               Follow other users to see posts.{' '}

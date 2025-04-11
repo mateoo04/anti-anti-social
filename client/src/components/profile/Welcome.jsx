@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useAuth } from '../../context/authContext';
 import Header from '../layout/Header';
 import { toast } from 'react-toastify';
-import supabase from '../../utils/supabase';
+import { uploadPhoto } from '../../utils/supabase';
 import { useNavigate } from 'react-router-dom';
 import personSvg from '../../assets/icons/person-circle.svg';
 
@@ -10,63 +10,49 @@ export default function Welcome() {
   const { authenticatedUser, setAuthenticatedUser } = useAuth();
   const navigate = useNavigate();
   const [file, setFile] = useState();
+  const [bio, setBio] = useState();
   const photoRef = useRef();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!file) {
-      toast.error('Please upload an image!');
+    if (bio && (bio.length < 2 || bio.length > 50)) {
+      toast.error('Bio must be between 2 and 50 characters long');
       return;
     }
 
-    if (
-      ![
-        'image/jpeg',
-        'image/png',
-        'image/gif',
-        'image/webp',
-        'image/svg+xml',
-      ].includes(file.type)
-    ) {
-      toast.error(
-        'Invalid file format! Please upload a JPG, PNG, GIF, WebP or SVG.'
-      );
-      return;
-    }
+    const updateObj = { bio };
 
-    const filePath = `profile-photos/${authenticatedUser.id}-${Date.now()}`;
+    try {
+      if (file) {
+        let profileImageUrlResult = await uploadPhoto(
+          file,
+          `profile-photos/${authenticatedUser.id}-${Date.now()}`
+        );
+        if (profileImageUrlResult.invalid) return;
+        else updateObj.profileImageUrl = profileImageUrlResult;
+      }
 
-    const { data, error } = await supabase.storage
-      .from('anti-anti-social')
-      .upload(filePath, file, {
-        upsert: true,
+      const response = await fetch('/api/users', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateObj),
       });
 
-    if (error) {
-      throw new Error(error);
+      if (!response.ok) throw new Error('Failed to save changes');
+
+      const json = await response.json();
+
+      setAuthenticatedUser((prev) => ({ ...prev, ...json }));
+      navigate(`/user/${authenticatedUser.id}`);
+    } catch {
+      toast.error('Failed to save changes');
     }
-
-    const { data: profileImageUrlData } = supabase.storage
-      .from('anti-anti-social')
-      .getPublicUrl(data.path);
-
-    const response = await fetch('/api/users', {
-      method: 'PUT',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ profileImageUrl: profileImageUrlData.publicUrl }),
-    });
-
-    if (!response.ok) throw new Error('Failed to save the image');
-
-    const json = await response.json();
-
-    setAuthenticatedUser((prev) => ({ ...prev, ...json }));
-    navigate(`/user/${authenticatedUser.id}`);
   };
+
   const setSelectedPhoto = (selectedPhoto) => {
     if (selectedPhoto && photoRef.current) {
       const reader = new FileReader();
@@ -88,8 +74,8 @@ export default function Welcome() {
           onSubmit={handleSubmit}
           className='d-flex flex-column pt-3 align-items-start'
         >
-          <legend>One more step, upload a profile picture:</legend>
-          <div className='d-flex gap-3 align-items-center'>
+          <legend>Just a few more things..</legend>
+          <div className='d-flex flex-column gap-3 align-items-center'>
             <div className='d-flex align-items-center gap-3 pt-3 pb-3'>
               <img
                 src={authenticatedUser.profileImageUrl || personSvg}
@@ -98,6 +84,7 @@ export default function Welcome() {
                 className='profile-photo-lg'
               />
               <label htmlFor='file'>
+                Profile picture
                 <input
                   id='file-input'
                   type='file'
@@ -110,12 +97,23 @@ export default function Welcome() {
                 />
               </label>
             </div>
-            <input
-              type='submit'
-              value='SAVE'
-              className='btn bg-primary text-white'
-            />
           </div>
+          <label htmlFor='bio'>
+            Bio
+            <textarea
+              name='bio'
+              id='bio'
+              minLength={2}
+              maxLength={50}
+              onChange={(e) => setBio(e.target.value)}
+              className='form-control mb-3'
+            ></textarea>
+          </label>
+          <input
+            type='submit'
+            value='SAVE'
+            className='btn bg-primary text-white'
+          />
         </form>
       </main>
     </>

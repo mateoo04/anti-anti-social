@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
-import supabase from '../../utils/supabase';
+import supabase, { uploadPhoto } from '../../utils/supabase';
 import { useEffect, useRef } from 'react';
 import Header from '../layout/Header';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,12 @@ const editUserSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters long'),
   lastName: z.string().min(2, 'Last name must be at least 2 characters long'),
   username: z.string().min(2, 'Username must be at least 2 characters long'),
+  bio: z.optional(
+    z
+      .string()
+      .min(2, 'Bio must be at least 2 characters long')
+      .max(50, 'Bio cannot be longer than 50 characters')
+  ),
   file: z
     .optional(z.instanceof(FileList))
     .transform((fileList) => {
@@ -57,6 +63,7 @@ export default function EditProfile() {
         firstName: authenticatedUser.firstName,
         lastName: authenticatedUser.lastName,
         username: authenticatedUser.username,
+        bio: authenticatedUser.bio,
       });
     }
   }, [authenticatedUser, reset]);
@@ -76,23 +83,14 @@ export default function EditProfile() {
       }
 
       if (formFields.file) {
-        const filePath = `profile-photos/${authenticatedUser.id}-${Date.now()}`;
+        const profileImageUrl = await uploadPhoto(
+          formFields.file,
+          `profile-photos/${authenticatedUser.id}-${Date.now()}`
+        );
 
-        const { data, error } = await supabase.storage
-          .from('anti-anti-social')
-          .upload(filePath, formFields.file, {
-            upsert: true,
-          });
+        if (profileImageUrl.invalid) return;
 
-        if (error) {
-          throw new Error(error);
-        }
-
-        const { data: profileImageUrlData } = supabase.storage
-          .from('anti-anti-social')
-          .getPublicUrl(data.path);
-
-        updatedFields.profileImageUrl = profileImageUrlData.publicUrl;
+        updatedFields.profileImageUrl = profileImageUrl;
 
         delete updatedFields.file;
       }
@@ -203,6 +201,15 @@ export default function EditProfile() {
               {...register('username')}
               className='form-control mb-3'
             />
+          </label>
+          <label htmlFor='bio'>
+            Bio
+            <textarea
+              name='bio'
+              id='bio'
+              {...register('bio')}
+              className='form-control mb-3'
+            ></textarea>
           </label>
           <input
             type='submit'

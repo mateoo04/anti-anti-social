@@ -63,6 +63,7 @@ async function signUp(req, res, next) {
         firstName: true,
         lastName: true,
         username: true,
+        bio: true,
         profileImageUrl: true,
         followers: true,
         following: true,
@@ -157,6 +158,7 @@ async function validateCredentials(req, res, next) {
         id: true,
         firstName: true,
         lastName: true,
+        bio: true,
         username: true,
         profileImageUrl: true,
         followers: {
