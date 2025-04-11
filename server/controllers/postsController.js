@@ -110,11 +110,10 @@ async function getPostById(req, res, next) {
 
 async function createNewPost(req, res, next) {
   try {
-    const { content } = req.body;
-
     const post = await prisma.post.create({
       data: {
-        content,
+        content: req.body.content || undefined,
+        photoUrl: req.body.photoUrl || undefined,
         authorId: req.user.id,
       },
     });

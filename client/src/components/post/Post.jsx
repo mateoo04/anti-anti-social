@@ -17,6 +17,7 @@ export default function Post({
   authorId,
   postId,
   content,
+  photoUrl,
   dateTime,
   initialLikeCount,
   initialIsLikedByAuthUser,
@@ -179,8 +180,13 @@ export default function Post({
           </div>
         </div>
       </Link>
-      <p className='mb-2'>{content}</p>
-      <p className='text-muted'>{formatDateTime(dateTime)}</p>
+      <p className='pb-2'>{content}</p>
+      {photoUrl && (
+        <div className='post-photo-container d-flex justify-content-center'>
+          <img src={photoUrl} alt='' className='post-photo mb-3' />
+        </div>
+      )}
+      <p className='text-muted pt-3'>{formatDateTime(dateTime)}</p>
       <div className='options pt-1 mb-2'>
         <button onClick={isLikedByAuthUser ? unlikePost : likePost}>
           <img

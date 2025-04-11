@@ -78,6 +78,7 @@ export default function Profile() {
                     dateTime={post.dateTime}
                     postId={post.id}
                     content={post.content}
+                    photoUrl={post.photoUrl}
                     initialLikeCount={post._count?.likedBy}
                     initialIsLikedByAuthUser={post.likedByAuthUser}
                     key={'profile-posts-' + post.id}

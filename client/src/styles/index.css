@@ -109,3 +109,12 @@ input[type='submit']:hover,
   width: 20px;
   height: 20px;
 }
+
+.x-icon {
+  width: 20px;
+}
+
+.post-photo,
+.post-photo-container {
+  max-width: 100%;
+}

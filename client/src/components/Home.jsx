@@ -52,6 +52,7 @@ export default function Home() {
                   dateTime={post.dateTime}
                   postId={post.id}
                   content={post.content}
+                  photoUrl={post.photoUrl}
                   initialLikeCount={post._count.likedBy}
                   initialIsLikedByAuthUser={post.likedByAuthUser}
                 ></Post>
