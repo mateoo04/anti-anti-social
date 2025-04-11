@@ -41,7 +41,11 @@ export default function Header() {
               className='d-flex align-items-center gap-1 text-decoration-none text-black bg-transparent border-0'
               data-bs-toggle='dropdown'
             >
-              <img src={personIcon} alt='' className='profile-icon' />
+              <img
+                src={authenticatedUser.profileImageUrl || personIcon}
+                alt=''
+                className='profile-photo-sm'
+              />
               <p className='mb-0'>
                 {authenticatedUser.firstName + ' ' + authenticatedUser.lastName}
               </p>
@@ -53,6 +57,14 @@ export default function Header() {
                   className='text-decoration-none text-black'
                 >
                   View profile
+                </Link>
+              </li>
+              <li className='dropdown-item'>
+                <Link
+                  to={authenticatedUser ? `/edit-profile` : '/'}
+                  className='text-decoration-none text-black'
+                >
+                  Edit profile
                 </Link>
               </li>
               <li className='dropdown-item'>

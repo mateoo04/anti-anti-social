@@ -54,7 +54,7 @@ export default function SignUp() {
       const json = await response.json();
       logIn(json.user);
 
-      navigate('/');
+      navigate('/welcome');
     } catch {
       toast.error('Failed to sign up');
     }

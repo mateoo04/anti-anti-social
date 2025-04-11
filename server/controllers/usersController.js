@@ -230,18 +230,16 @@ async function removeFollower(req, res, next) {
 
 async function updateUserProfile(req, res, next) {
   try {
-    const { firstName, lastName, username, profileImageUrl } = req.body;
-
     let usernameTaken;
 
-    if (username)
+    if (req.body.username)
       usernameTaken = await prisma.user.findFirst({
         where: {
-          username,
+          username: req.body.username,
         },
       });
 
-    if (username && usernameTaken)
+    if (req.body.username && usernameTaken)
       return res.status(409).json({ message: 'Username is not available.' });
 
     const updatedUser = await prisma.user.update({
@@ -249,10 +247,10 @@ async function updateUserProfile(req, res, next) {
         id: req.user.id,
       },
       data: {
-        firstName: firstName || undefined,
-        lastName: lastName || undefined,
-        username: username || undefined,
-        profileImageUrl: profileImageUrl || undefined,
+        firstName: req.body.firstName || undefined,
+        lastName: req.body.lastName || undefined,
+        username: req.body.username || undefined,
+        profileImageUrl: req.body.profileImageUrl || undefined,
       },
       select: {
         firstName: true,

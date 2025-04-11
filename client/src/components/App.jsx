@@ -10,6 +10,8 @@ import Profile from './profile/Profile';
 import ProtectedRoute from './ProtectedRoute';
 import FollowsList from './profile/FollowsList';
 import EditPost from './post/EditPost';
+import EditProfile from './profile/EditProfile';
+import Welcome from './profile/Welcome';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,22 @@ const router = createBrowserRouter([
   },
   { path: '/auth/log-in', element: <LogIn /> },
   { path: '/auth/sign-up', element: <SignUp /> },
+  {
+    path: '/welcome',
+    element: (
+      <ProtectedRoute>
+        <Welcome />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/edit-profile',
+    element: (
+      <ProtectedRoute>
+        <EditProfile />
+      </ProtectedRoute>
+    ),
+  },
   {
     path: '/search',
     element: (

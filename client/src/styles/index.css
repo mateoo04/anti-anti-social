@@ -25,20 +25,26 @@ p {
   height: 40px;
 }
 
-.profile-icon {
-  height: 24px;
-}
-
 .search-icon {
   height: 22px;
 }
 
+.profile-photo-lg {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
 .profile-photo-md {
+  width: 40px;
   height: 40px;
+  border-radius: 50%;
 }
 
 .profile-photo-sm {
+  width: 30px;
   height: 30px;
+  border-radius: 50%;
 }
 
 .comment-content {
@@ -60,15 +66,15 @@ p {
   width: 95px;
 }
 
-.main-profile-photo {
-  width: 100px;
-}
-
 .link:hover,
 .btn:hover,
 input[type='submit']:hover,
 .back-button:hover {
   cursor: pointer;
+}
+
+.link-hover-decoration:hover {
+  text-decoration: underline !important;
 }
 
 .back-button {

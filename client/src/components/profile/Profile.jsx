@@ -43,7 +43,7 @@ export default function Profile() {
               <img
                 src={profile.profileImageUrl || personSvg}
                 alt=''
-                className='main-profile-photo'
+                className='profile-photo-lg'
               />
               <div className='d-flex flex-column'>
                 <h1 className='mb-1'>

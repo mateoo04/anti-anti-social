@@ -39,23 +39,35 @@ export default function Home() {
           <b>+</b> NEW POST
         </Link>
         <div className='posts mt-5 d-flex flex-column gap-2'>
-          {posts?.map((post) => {
-            return (
-              <Post
-                key={`post-${post.id}`}
-                authorId={post.author.id}
-                firstName={post.author.firstName}
-                lastName={post.author.lastName}
-                username={post.author.username}
-                profileImageUrl={post.author.profileImageUrl}
-                dateTime={post.dateTime}
-                postId={post.id}
-                content={post.content}
-                initialLikeCount={post._count.likedBy}
-                initialIsLikedByAuthUser={post.likedByAuthUser}
-              ></Post>
-            );
-          })}
+          {posts.length ? (
+            posts?.map((post) => {
+              return (
+                <Post
+                  key={`post-${post.id}`}
+                  authorId={post.author.id}
+                  firstName={post.author.firstName}
+                  lastName={post.author.lastName}
+                  username={post.author.username}
+                  profileImageUrl={post.author.profileImageUrl}
+                  dateTime={post.dateTime}
+                  postId={post.id}
+                  content={post.content}
+                  initialLikeCount={post._count.likedBy}
+                  initialIsLikedByAuthUser={post.likedByAuthUser}
+                ></Post>
+              );
+            })
+          ) : (
+            <p className='text-center'>
+              Follow other users to see posts.{' '}
+              <Link
+                className='text-secondary text-decoration-none link link-hover-decoration'
+                to={'/search'}
+              >
+                Click here to find accounts to follow!
+              </Link>
+            </p>
+          )}
         </div>
       </main>
     </>
