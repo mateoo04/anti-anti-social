@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/authContext';
 import logo from '../../assets/logo.png';
+import AuthOptions from './AuthOptions';
 
 const logInSchema = z.object({
   username: z.string().min(2, 'Username must be at least 2 characters long'),
@@ -69,7 +70,8 @@ export default function LogIn() {
         )}
         <form
           onSubmit={handleSubmit(handleLogIn)}
-          className='d-flex flex-column align-items-center mb-4'
+          id='login-form'
+          className='d-flex flex-column align-items-center'
         >
           <label htmlFor='username'>
             Username
@@ -91,12 +93,16 @@ export default function LogIn() {
               className='form-control mb-3'
             />
           </label>
+        </form>
+        <div className='d-flex flex-column gap-2 mb-2'>
           <input
+            form='login-form'
             type='submit'
             value='Log in'
-            className='btn bg-primary text-white'
+            className='btn bg-secondary text-white auth-btn w-100'
           />
-        </form>
+          <AuthOptions />
+        </div>
         <p className='text-center'>
           Don't have an account yet?{' '}
           <Link to='/auth/sign-up'>Sign up here</Link>

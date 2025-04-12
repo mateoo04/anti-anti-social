@@ -6,6 +6,7 @@ const {
   logOut,
   validateCredentials,
   authenticateJwt,
+  guestLogIn,
 } = require('../controllers/authController');
 const { validateSignUp, validateLogIn } = require('../lib/validators');
 const { passport } = require('../config/passport');
@@ -18,6 +19,8 @@ const authRouter = Router();
 authRouter.post('/sign-up', validateSignUp, signUp);
 
 authRouter.post('/log-in', validateLogIn, logIn);
+
+authRouter.post('/guest-login', guestLogIn);
 
 authRouter.post('/validate-credentials', authenticateJwt, validateCredentials);
 

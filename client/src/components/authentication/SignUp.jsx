@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/authContext';
 import logo from '../../assets/logo.png';
+import AuthOptions from './AuthOptions';
 
 const createUserSchema = z
   .object({
@@ -76,8 +77,9 @@ export default function SignUp() {
           ''
         )}
         <form
+          id='sign-up-form'
           onSubmit={handleSubmit(handleSignUp)}
-          className='d-flex flex-column align-items-center mb-4'
+          className='d-flex flex-column align-items-center'
         >
           <label htmlFor='firstName'>
             First name
@@ -115,7 +117,7 @@ export default function SignUp() {
               type='password'
               name='password'
               id='password'
-              autocomplete='new-password'
+              autoComplete='new-password'
               {...register('password')}
               className='form-control mb-3'
             />
@@ -126,15 +128,21 @@ export default function SignUp() {
               type='password'
               name='confirmPassword'
               id='confirmPassword'
-              autocomplete='new-password'
+              autoComplete='new-password'
               {...register('confirmPassword')}
               className='form-control mb-3'
             />
           </label>
-          <button type='submits' className='btn bg-primary text-white'>
-            Sign up
-          </button>
         </form>
+        <div className='d-flex flex-column gap-2 mb-2'>
+          <input
+            form='sign-up-form'
+            type='submit'
+            className='btn bg-secondary text-white'
+            value={'Sign up'}
+          />
+          <AuthOptions />
+        </div>
         <p className='text-center'>
           Already a user? <Link to='/auth/log-in'>Log in here</Link>
         </p>

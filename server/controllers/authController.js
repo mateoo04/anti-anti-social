@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const { PrismaClient } = require('@prisma/client');
 const { validationResult } = require('express-validator');
 const { passport } = require('../config/passport');
+const { createGuestIfNotExists } = require('../lib/guestCreate');
 
 const prisma = new PrismaClient();
 
@@ -44,7 +45,7 @@ async function signUp(req, res, next) {
       },
     });
 
-    if (userWithEnteredUsername) {
+    if (userWithEnteredUsername || req.body.username === 'jan_rolf') {
       return res
         .status(409)
         .json({ message: 'User with that username already exists.' });
@@ -127,6 +128,22 @@ async function logIn(req, res, next) {
   }
 }
 
+async function guestLogIn(req, res, next) {
+  try {
+    const user = await createGuestIfNotExists();
+
+    respond(res, 200, {
+      ...user,
+      following: user.following?.map(
+        (followingUser) => followingUser.followingId
+      ),
+      followers: user.followers?.map((followerUser) => followerUser.followerId),
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function logOut(req, res, next) {
   res.clearCookie('authToken', { httpOnly: true });
   res.clearCookie('username', { httpOnly: false });
@@ -197,4 +214,5 @@ module.exports = {
   logOut,
   authenticateJwt,
   validateCredentials,
+  guestLogIn,
 };
