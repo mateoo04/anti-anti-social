@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/authContext';
+import gitHubIcon from '../../assets/icons/github-mark.svg';
 
 export default function AuthOptions() {
   const { logIn } = useAuth();
@@ -25,8 +26,15 @@ export default function AuthOptions() {
   };
   return (
     <>
+      <a
+        href='/api/auth/github'
+        className='text-decoration-none text-white bg-primary btn d-flex gap-1'
+      >
+        <img src={gitHubIcon} alt='' className='github-icon' />
+        Continue with GitHub
+      </a>
       <button
-        className='btn bg-primary text-white auth-btn'
+        className='btn guest-login-button text-primary auth-btn'
         onClick={handleGuestLogin}
       >
         Continue as a guest

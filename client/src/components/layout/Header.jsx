@@ -47,7 +47,9 @@ export default function Header() {
                 className='profile-photo-sm'
               />
               <p className='mb-0'>
-                {authenticatedUser.firstName + ' ' + authenticatedUser.lastName}
+                {`${authenticatedUser.firstName} ${
+                  authenticatedUser.lastName || ''
+                }`}
               </p>
             </button>
             <ul className='dropdown-menu dropdown-menu-light mt-2'>

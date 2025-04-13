@@ -47,6 +47,14 @@ p {
   border-radius: 50%;
 }
 
+.github-icon {
+  width: 24px;
+}
+
+.guest-login-button {
+  background-color: #f4e4d4 !important;
+}
+
 .comment-content {
   padding-left: 40px;
 }

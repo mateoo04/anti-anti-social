@@ -47,7 +47,7 @@ export default function Profile() {
               />
               <div className='d-flex flex-column'>
                 <h1 className='mb-1'>
-                  {profile.firstName + ' ' + profile.lastName}
+                  {`${profile.firstName} ${profile.lastName || ''}`}
                 </h1>
                 <p className='text-muted'>{profile.username}</p>
               </div>

@@ -7,7 +7,7 @@ const { createGuestIfNotExists } = require('../lib/guestCreate');
 
 const prisma = new PrismaClient();
 
-async function respond(res, successStatusCode, user) {
+async function respond(res, successStatusCode, user, isGitHubOauth) {
   const tokenObj = issueJWT(user);
 
   res.cookie('authToken', tokenObj.token, {
@@ -23,10 +23,12 @@ async function respond(res, successStatusCode, user) {
     sameSite: 'Strict',
   });
 
-  res.status(successStatusCode).json({
-    success: true,
-    user,
-  });
+  if (isGitHubOauth) res.redirect('/');
+  else
+    res.status(successStatusCode).json({
+      success: true,
+      user,
+    });
 }
 
 async function signUp(req, res, next) {
@@ -90,7 +92,13 @@ async function logIn(req, res, next) {
       where: {
         username: req.body.username,
       },
-      include: {
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        username: true,
+        bio: true,
+        profileImageUrl: true,
         followers: {
           select: {
             followerId: true,
@@ -126,6 +134,23 @@ async function logIn(req, res, next) {
   } catch (err) {
     next(err);
   }
+}
+
+async function gitHubLogIn(req, res) {
+  respond(
+    res,
+    200,
+    {
+      ...req.user,
+      following: req.user.following.map(
+        (followingUser) => followingUser.followingId
+      ),
+      followers: req.user.followers.map(
+        (followerUser) => followerUser.followerId
+      ),
+    },
+    true
+  );
 }
 
 async function guestLogIn(req, res, next) {
@@ -215,4 +240,5 @@ module.exports = {
   authenticateJwt,
   validateCredentials,
   guestLogIn,
+  gitHubLogIn,
 };
