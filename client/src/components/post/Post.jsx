@@ -191,7 +191,7 @@ export default function Post({
   };
   return (
     <div className='border rounded-4 pt-4 ps-4 pe-4 pb-3'>
-      <Link to={`/user/${authorId}`} className='text-decoration-none'>
+      <Link to={`/users/${authorId}`} className='text-decoration-none'>
         <div className='details d-flex gap-3 mb-3 align-items-center'>
           <img
             src={profileImageUrl || personSvg}
@@ -199,7 +199,7 @@ export default function Post({
             className='profile-photo-md'
           />
           <div className='d-flex flex-column'>
-            <h2 className='mb-0 h4'>{firstName + ' ' + lastName}</h2>
+            <h2 className='mb-0 h4'>{`${firstName} ${lastName || ''}`}</h2>
             <p className='text-muted'>{username}</p>
           </div>
         </div>

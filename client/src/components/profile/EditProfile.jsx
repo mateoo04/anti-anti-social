@@ -114,7 +114,7 @@ export default function EditProfile() {
       const json = await response.json();
 
       setAuthenticatedUser((prev) => ({ ...prev, ...json }));
-      navigate(`/user/${authenticatedUser.id}`);
+      navigate(`/users/${authenticatedUser.id}`);
     } catch (err) {
       console.error(err);
       toast.error('Failed to save changes');

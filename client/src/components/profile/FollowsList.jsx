@@ -39,7 +39,7 @@ export default function FollowsList() {
       <main className='container'>
         {profile.username && (
           <div className='d-flex gap-3'>
-            <Link to={`/user/${profile.id}`}>
+            <Link to={`/users/${profile.id}`}>
               <img
                 src={arrowLeft}
                 alt={`Back to user's profile`}

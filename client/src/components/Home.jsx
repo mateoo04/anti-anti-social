@@ -69,7 +69,7 @@ export default function Home() {
               Follow other users to see posts.{' '}
               <Link
                 className='text-secondary text-decoration-none link link-hover-decoration'
-                to={'/search'}
+                to={'/users'}
               >
                 Click here to find accounts to follow!
               </Link>

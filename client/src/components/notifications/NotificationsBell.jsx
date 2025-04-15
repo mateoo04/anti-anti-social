@@ -15,7 +15,7 @@ export default function NotificationsBell({ setOpenNotifications }) {
 
   return (
     <button
-      className='btn p-0 ms-1 border-0 notif-button position-relative'
+      className='btn p-0 border-0 notif-button position-relative'
       onClick={() => {
         setOpenNotifications(true);
         markNotifsRead();

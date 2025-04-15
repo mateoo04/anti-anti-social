@@ -13,6 +13,7 @@ import EditPost from './post/EditPost';
 import EditProfile from './profile/EditProfile';
 import Welcome from './profile/Welcome';
 import PostView from './post/PostView';
+import { NotificationsProvider } from '../context/notificationContext';
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/search',
+    path: '/users',
     element: (
       <ProtectedRoute>
         <Search />
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/user/:userId',
+    path: '/users/:userId',
     element: (
       <ProtectedRoute>
         <Profile />
@@ -58,7 +59,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/user/:userId/follows',
+    path: '/users/:userId/follows',
     element: (
       <ProtectedRoute>
         <FollowsList />
@@ -102,20 +103,22 @@ const router = createBrowserRouter([
 function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
-      <ToastContainer
-        position='top-right'
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme='light'
-        transition={Slide}
-      />
+      <NotificationsProvider>
+        <RouterProvider router={router} />
+        <ToastContainer
+          position='top-right'
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme='light'
+          transition={Slide}
+        />
+      </NotificationsProvider>
     </AuthProvider>
   );
 }

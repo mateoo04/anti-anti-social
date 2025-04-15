@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const http = require('http');
+const path = require('path');
 const socketHandler = require('./config/socketHandler');
 
 const indexRouter = require('./routes/indexRouter');
@@ -17,6 +18,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(passport.initialize());
 
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -30,6 +33,10 @@ socketHandler(io);
 setUpSocketEvents(io);
 
 app.use('/api', indexRouter);
+
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+});
 
 app.use((err, req, res, next) => {
   console.error(err);

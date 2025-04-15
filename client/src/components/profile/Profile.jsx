@@ -57,13 +57,13 @@ export default function Profile() {
             <p className='mb-2 preserve-newlines'>{profile.bio}</p>
             <div className='follow-stats d-flex gap-3'>
               <Link
-                to={`/user/${userId}/follows`}
+                to={`/users/${userId}/follows`}
                 className='text-decoration-none'
               >
                 <p>{`${profile._count?.followers} followers`}</p>
               </Link>
               <Link
-                to={`/user/${userId}/follows`}
+                to={`/users/${userId}/follows`}
                 className='text-decoration-none'
               >
                 <p>{`${profile._count?.following} following`}</p>

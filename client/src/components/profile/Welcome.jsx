@@ -47,7 +47,7 @@ export default function Welcome() {
       const json = await response.json();
 
       setAuthenticatedUser((prev) => ({ ...prev, ...json }));
-      navigate(`/user/${authenticatedUser.id}`);
+      navigate(`/users/${authenticatedUser.id}`);
     } catch {
       toast.error('Failed to save changes');
     }

@@ -15,7 +15,7 @@ export default function Notifications({
       case 'FOLLOW':
         return (
           <p
-            onClick={() => navigate(`/user/${notif.fromUser.id}`)}
+            onClick={() => navigate(`/users/${notif.fromUser.id}`)}
             className='cursor-pointer'
           >
             <b>
@@ -56,7 +56,10 @@ export default function Notifications({
       className={`notification-overlay ${openNotifications ? 'show' : ''}`}
       onClick={() => setOpenNotifications(false)}
     >
-      <div className='notification-panel' onClick={(e) => e.stopPropagation()}>
+      <div
+        className='notification-panel d-flex flex-column'
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className='p-3 border-bottom d-flex justify-content-between align-items-center'>
           <h5 className='mb-0'>Notifications</h5>
           <button
@@ -64,7 +67,7 @@ export default function Notifications({
             onClick={() => setOpenNotifications(false)}
           ></button>
         </div>
-        <div className='p-3'>
+        <div className='p-3 overflow-auto'>
           {notifications.length ? (
             notifications.map((notification) => {
               return (
@@ -78,7 +81,7 @@ export default function Notifications({
                     className='profile-photo-md cursor-pointer'
                     alt=''
                     onClick={() =>
-                      navigate(`/user/${notification.fromUser.id}`)
+                      navigate(`/users/${notification.fromUser.id}`)
                     }
                   />
                   <div>

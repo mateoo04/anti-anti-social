@@ -9,13 +9,11 @@ module.exports = (io) => {
     socket.on('joinRoom', async (roomId) => {
       if (!roomId) return;
       await socket.join(roomId);
-      console.log(`Socket ${socket.id} joined room ${roomId}`);
     });
 
     socket.on('leaveRoom', async (roomId) => {
       if (!roomId) return;
       await socket.leave(roomId);
-      console.log(`Socket ${socket.id} joined room ${roomId}`);
     });
   });
 };
