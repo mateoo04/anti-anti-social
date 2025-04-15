@@ -13,6 +13,9 @@ async function getNotifications(req, res, next) {
         fromUser: true,
         post: true,
       },
+      orderBy: {
+        dateTime: 'desc',
+      },
     });
 
     return res.json(notifications);

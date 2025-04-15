@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { events } = require('../config/events');
 
 const prisma = new PrismaClient();
 
@@ -88,14 +89,23 @@ async function addComment(req, res, next) {
       },
     });
 
-    await prisma.notification.create({
-      data: {
-        fromUserId: req.user.id,
-        toUserId: comment.post.authorId,
-        postId,
-        type: 'COMMENT',
-      },
-    });
+    if (req.user.id !== comment.post.authorId) {
+      const notification = await prisma.notification.create({
+        data: {
+          fromUserId: req.user.id,
+          toUserId: comment.post.authorId,
+          postId,
+          type: 'COMMENT',
+        },
+        include: {
+          toUser: true,
+          fromUser: true,
+          post: true,
+        },
+      });
+
+      events.emit('newNotification', { notification });
+    }
 
     return res.status(201).send(comment);
   } catch (err) {

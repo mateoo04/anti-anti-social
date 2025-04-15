@@ -1,15 +1,21 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 import { useAuth } from './authContext';
+import socket from '../utils/socket';
 
 const NotificationsContext = createContext();
 
 export function NotificationsProvider({ children }) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, authenticatedUser } = useAuth();
   const [notifications, setNotifications] = useState([]);
+  const notificationsRef = useRef([]);
 
   useEffect(() => {
-    const validateCredentials = async () => {
+    notificationsRef.current = notifications;
+  }, [notifications]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
       if (!isAuthenticated) return;
 
       try {
@@ -28,8 +34,24 @@ export function NotificationsProvider({ children }) {
       }
     };
 
-    validateCredentials();
-  }, [isAuthenticated]);
+    fetchNotifications();
+  }, [isAuthenticated, authenticatedUser]);
+
+  useEffect(() => {
+    const setUpSocket = () => {
+      socket.emit('joinRoom', `notifs-${authenticatedUser.id}`);
+
+      socket.on('newNotification', (notification) => {
+        if (
+          !notificationsRef.current.some((item) => item.id === notification.id)
+        ) {
+          setNotifications((prev) => [notification, ...prev]);
+        }
+      });
+    };
+
+    if (isAuthenticated) setUpSocket();
+  }, [isAuthenticated, authenticatedUser]);
 
   const markNotifsRead = () => {
     const markRead = async () => {

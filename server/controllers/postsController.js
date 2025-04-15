@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { events } = require('../config/events');
 
 const prisma = new PrismaClient();
 
@@ -163,15 +164,22 @@ async function likePost(req, res, next) {
       },
     });
 
-    if (!exists) {
-      await prisma.notification.create({
+    if (!exists && req.user.id !== likedPost.authorId) {
+      const notification = await prisma.notification.create({
         data: {
           type: 'LIKE',
           fromUserId: req.user.id,
           toUserId: likedPost.authorId,
           postId: likedPost.id,
         },
+        include: {
+          toUser: true,
+          fromUser: true,
+          post: true,
+        },
       });
+
+      events.emit('newNotification', { notification });
     }
 
     return res.status(204).send();
