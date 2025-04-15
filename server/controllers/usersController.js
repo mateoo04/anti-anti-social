@@ -163,6 +163,15 @@ async function followUser(req, res, next) {
         },
       });
 
+      if (follow)
+        await prisma.notification.create({
+          data: {
+            toUserId: followingId,
+            fromUserId: req.user.id,
+            type: 'FOLLOW',
+          },
+        });
+
       return res.status(201).json({ message: 'User followed', follow });
     }
   } catch (err) {

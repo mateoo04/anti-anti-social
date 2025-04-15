@@ -77,6 +77,15 @@ async function getPostById(req, res, next) {
           id: postId,
         },
         include: {
+          author: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profileImageUrl: true,
+            },
+          },
           _count: {
             select: {
               likedBy: true,
@@ -139,7 +148,31 @@ async function likePost(req, res, next) {
           },
         },
       },
+      select: {
+        authorId: true,
+        id: true,
+      },
     });
+
+    const exists = await prisma.notification.findFirst({
+      where: {
+        type: 'LIKE',
+        fromUserId: req.user.id,
+        toUserId: likedPost.authorId,
+        postId: likedPost.id,
+      },
+    });
+
+    if (!exists) {
+      await prisma.notification.create({
+        data: {
+          type: 'LIKE',
+          fromUserId: req.user.id,
+          toUserId: likedPost.authorId,
+          postId: likedPost.id,
+        },
+      });
+    }
 
     return res.status(204).send();
   } catch (err) {

@@ -80,6 +80,20 @@ async function addComment(req, res, next) {
             profileImageUrl: true,
           },
         },
+        post: {
+          select: {
+            authorId: true,
+          },
+        },
+      },
+    });
+
+    await prisma.notification.create({
+      data: {
+        fromUserId: req.user.id,
+        toUserId: comment.post.authorId,
+        postId,
+        type: 'COMMENT',
       },
     });
 

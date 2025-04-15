@@ -3,6 +3,7 @@ const { passport } = require('../config/passport');
 const authRouter = require('../routes/authRouter');
 const usersRouter = require('./usersRouter');
 const postsRouter = require('./postsRouter');
+const { notificationsRouter } = require('./notificationsRouter');
 
 const indexRouter = Router();
 
@@ -18,6 +19,12 @@ indexRouter.use(
   '/posts',
   passport.authenticate('jwt', { session: false }),
   postsRouter
+);
+
+indexRouter.use(
+  '/notifications',
+  passport.authenticate('jwt', { session: false }),
+  notificationsRouter
 );
 
 indexRouter.get('/', (req, res) =>

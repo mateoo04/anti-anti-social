@@ -4,10 +4,12 @@ import { toast } from 'react-toastify';
 import personSvg from '../../assets/icons/person-circle.svg';
 import Header from '../layout/Header';
 import Post from '../post/Post';
+import { useAuth } from '../../context/authContext';
 
 export default function Profile() {
   const { userId } = useParams();
   const [profile, setProfile] = useState({});
+  const { authenticatedUser, follow, unfollow } = useAuth();
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -67,6 +69,32 @@ export default function Profile() {
                 <p>{`${profile._count?.following} following`}</p>
               </Link>
             </div>
+            {profile.id != authenticatedUser.id &&
+              (authenticatedUser.following?.includes(profile.id) ? (
+                <button
+                  className='btn bg-white border text-black unfollow-btn'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    unfollow(profile.id);
+                    if (profile._count) profile._count.followers--;
+                  }}
+                >
+                  Unfollow
+                </button>
+              ) : (
+                <button
+                  className='btn bg-primary text-white follow-btn'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    follow(profile.id);
+                    if (profile._count) profile._count.followers++;
+                  }}
+                >
+                  Follow
+                </button>
+              ))}
             <div className='posts mt-5 d-flex flex-column gap-2'>
               {profile.posts?.map((post) => {
                 return (

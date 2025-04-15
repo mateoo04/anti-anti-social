@@ -6,7 +6,7 @@ import sendSvg from '../../assets/icons/send.svg';
 import threeDotsSvg from '../../assets/icons/three-dots.svg';
 import formatDateTime from '../../utils/helpers';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Comment from './Comment';
 import { useAuth } from '../../context/authContext';
@@ -24,13 +24,14 @@ export default function Post({
   initialLikeCount,
   initialIsLikedByAuthUser,
   removePost,
+  areCommentsOpen,
 }) {
   const { authenticatedUser } = useAuth();
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLikedByAuthUser, setIsLikedByAuthUser] = useState(
     initialIsLikedByAuthUser
   );
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(areCommentsOpen || false);
   const [newCommentText, setNewCommentText] = useState('');
   const [comments, setComments] = useState([]);
   const navigate = useNavigate();
@@ -97,22 +98,26 @@ export default function Post({
     }
   };
 
-  const fetchComments = async () => {
-    try {
-      const response = await fetch(`/api/posts/${postId}/comments`, {
-        method: 'GET',
-        credentials: 'include',
-      });
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch(`/api/posts/${postId}/comments`, {
+          method: 'GET',
+          credentials: 'include',
+        });
 
-      if (!response.ok) throw new Error('Failed to load the comments');
+        if (!response.ok) throw new Error('Failed to load the comments');
 
-      const json = await response.json();
+        const json = await response.json();
 
-      setComments(json);
-    } catch {
-      toast.error('Failed to load the comments');
-    }
-  };
+        setComments(json);
+      } catch {
+        toast.error('Failed to load the comments');
+      }
+    };
+
+    if (showComments) fetchComments();
+  }, [showComments, postId]);
 
   const likeComment = async (commentId) => {
     try {
@@ -218,7 +223,6 @@ export default function Post({
         <button
           onClick={() => {
             setShowComments((prev) => !prev);
-            if (!showComments) fetchComments();
           }}
         >
           <img src={chatSvg} alt='Comments icon' className='comment-image' />
@@ -265,7 +269,7 @@ export default function Post({
             e.preventDefault();
             postComment();
           }}
-          className='d-flex flex-row align-items-center w-100 gap-2'
+          className='d-flex flex-row align-items-center w-100 gap-2 ps-2 pe-2'
         >
           <label htmlFor='content' className='w-100'>
             <textarea

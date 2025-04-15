@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const { passport } = require('../../config/passport');
 const request = require('supertest');
 const express = require('express');
+const indexRouter = require('../../routes/indexRouter');
 
 let app;
 
@@ -17,6 +18,12 @@ function getApp() {
   app.use(cookieParser());
 
   app.use('/api/auth', authRouter);
+
+  app.use(
+    '/api/',
+    passport.authenticate('jwt', { session: false }),
+    indexRouter
+  );
 
   return app;
 }

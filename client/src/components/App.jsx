@@ -12,6 +12,7 @@ import FollowsList from './profile/FollowsList';
 import EditPost from './post/EditPost';
 import EditProfile from './profile/EditProfile';
 import Welcome from './profile/Welcome';
+import PostView from './post/PostView';
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <EditPost />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/posts/:postId',
+    element: (
+      <ProtectedRoute>
+        <PostView />
       </ProtectedRoute>
     ),
   },

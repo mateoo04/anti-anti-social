@@ -28,6 +28,8 @@ model User{
   comments Comment[]
   likedPosts Post[] @relation("LikedPosts")
   likedComments Comment[] @relation("LikedComments")
+  sentNotifications Notification[] @relation("NotificationFrom")
+  receivedNotifications Notification[] @relation("NotificationTo")
 }
 model Follows{
   followerId String
@@ -47,6 +49,7 @@ model Post{
   author User @relation(fields: [authorId], references: [id])
   comments Comment[]
   likedBy User[] @relation("LikedPosts")
+  notifications Notification[]
 }
 
 model Comment{
@@ -58,4 +61,28 @@ model Comment{
   postId String
   post Post @relation(fields: [postId], references: [id])
   likedBy User[] @relation("LikedComments")
+  notifications Notification[]
+}
+
+enum NotificationType{
+  FOLLOW
+  LIKE
+  COMMENT
+}
+
+model Notification{
+  id String @id @default(uuid())
+  dateTime DateTime @default(now())
+  type NotificationType
+  fromUserId String
+  fromUser User @relation("NotificationFrom", fields: [fromUserId], references: [id])
+  toUserId String
+  toUser User @relation("NotificationTo", fields: [toUserId], references: [id])
+  postId String?
+  post Post? @relation(fields: [postId], references: [id])
+  isRead Boolean @default(false)
+  commentId String?
+  comment Comment? @relation(fields: [commentId], references: [id])
+
+  @@unique([type, toUserId, fromUserId, postId, commentId])
 }

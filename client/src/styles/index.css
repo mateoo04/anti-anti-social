@@ -26,6 +26,30 @@ p {
 }
 
 .search-icon {
+  height: 20px;
+}
+
+.notif-button {
+  width: 34px;
+  height: 36px;
+}
+
+.notif-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  height: 19px;
+  width: 19px;
+  background-color: #de1452;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.bell-icon {
   height: 22px;
 }
 
@@ -149,8 +173,56 @@ img {
   object-fit: cover;
 }
 
+.comments {
+  max-height: 340px;
+  overflow-y: scroll;
+}
+
+.cursor-pointer:hover {
+  cursor: pointer;
+}
+
 .preserve-newlines {
   white-space: pre-wrap;
+}
+
+.notification-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.notification-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.notification-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: #fff;
+  transition: transform 0.3s ease;
+  z-index: 1060;
+  width: 100%;
+  max-width: 400px;
+  transform: translateX(-100%);
+}
+
+.notification-overlay.show .notification-panel {
+  transform: translateX(0);
+}
+
+@media (max-width: 767.98px) {
+  .notification-panel {
+    width: 100%;
+    max-width: none;
+  }
 }
 
 .loader-container {

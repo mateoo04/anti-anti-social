@@ -65,6 +65,44 @@ export function AuthProvider({ children }) {
     validateCredentials();
   }, []);
 
+  const follow = async (id) => {
+    try {
+      const response = await fetch(`/api/users/${id}/follow`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (!response.ok) throw new Error('Error trying to follow the account');
+
+      setAuthenticatedUser((prev) => ({
+        ...prev,
+        following: prev.following ? [...prev.following, id] : [id],
+      }));
+    } catch (err) {
+      console.log(err);
+      toast.error('Failed to follow the account');
+    }
+  };
+
+  const unfollow = async (id) => {
+    try {
+      const response = await fetch(`/api/users/${id}/unfollow`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (!response.ok) throw new Error('Error trying to unfollow the account');
+
+      setAuthenticatedUser((prev) => ({
+        ...prev,
+        following: prev.following.filter((accountId) => accountId !== id),
+      }));
+    } catch (err) {
+      console.log(err);
+      toast.error('Failed to unfollow the account');
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -73,6 +111,8 @@ export function AuthProvider({ children }) {
         setAuthenticatedUser,
         logIn,
         logOut,
+        follow,
+        unfollow,
       }}
     >
       {children}

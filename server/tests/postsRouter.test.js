@@ -1,20 +1,12 @@
 require('dotenv').config({ path: '.env.test' });
 
-const { passport } = require('../config/passport');
 const request = require('supertest');
 const { PrismaClient } = require('@prisma/client');
 const { getApp, createUser } = require('./utils/helpers');
-const postsRouter = require('../routes/postsRouter');
 
 const prisma = new PrismaClient();
 
 const app = getApp();
-
-app.use(
-  '/api/posts',
-  passport.authenticate('jwt', { session: false }),
-  postsRouter
-);
 
 let userA, userB, userC;
 let userAPost;
@@ -239,5 +231,17 @@ describe('Post actions', () => {
     });
 
     expect(post).toBe(null);
+  });
+});
+
+describe('Notifications', () => {
+  test("returns User a's notifications", async () => {
+    const response = await request(app)
+      .get(`/api/notifications`)
+      .set('Cookie', userA.authTokenCookie)
+      .send();
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBe(3);
   });
 });

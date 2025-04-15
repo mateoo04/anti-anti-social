@@ -10,12 +10,6 @@ const prisma = new PrismaClient();
 
 const app = getApp();
 
-app.use(
-  '/api/users',
-  passport.authenticate('jwt', { session: false }),
-  usersRouter
-);
-
 let userA, userB;
 
 beforeAll(async () => {
