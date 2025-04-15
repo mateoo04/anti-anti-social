@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { events } = require('../config/events');
 
 const prisma = new PrismaClient();
 
@@ -163,14 +164,22 @@ async function followUser(req, res, next) {
         },
       });
 
-      if (follow)
-        await prisma.notification.create({
+      if (follow) {
+        const notification = await prisma.notification.create({
           data: {
             toUserId: followingId,
             fromUserId: req.user.id,
             type: 'FOLLOW',
           },
+          include: {
+            toUser: true,
+            fromUser: true,
+            post: true,
+          },
         });
+
+        events.emit('newNotification', { notification });
+      }
 
       return res.status(201).json({ message: 'User followed', follow });
     }

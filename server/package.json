@@ -2,12 +2,12 @@
   "name": "app",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test:reset-db": "dotenv -e .env.test -- npx prisma db push --force-reset",
     "test": "dotenv -e .env.test -- jest",
     "test:full": "npm run test:reset-db && npm run test",
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +23,8 @@
     "jsonwebtoken": "^9.0.2",
     "passport": "^0.7.0",
     "passport-github2": "^0.1.12",
-    "passport-jwt": "^4.0.1"
+    "passport-jwt": "^4.0.1",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.6.0",

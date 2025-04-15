@@ -89,6 +89,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+    path: '*',
+    element: (
+      <ProtectedRoute>
+        <NotFound />
+      </ProtectedRoute>
+    ),
+  },
 ]);
 
 function App() {

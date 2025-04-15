@@ -95,7 +95,19 @@ export default function Profile() {
                   Follow
                 </button>
               ))}
-            <div className='posts mt-5 d-flex flex-column gap-2'>
+            <div className='d-flex justify-content-center mt-3'>
+              {profile.id === authenticatedUser.id ? (
+                <Link
+                  to={'/posts/new'}
+                  className='align-self-center text-decoration-none btn rounded-5 bg-secondary text-white'
+                >
+                  <b>+</b> NEW POST
+                </Link>
+              ) : (
+                ''
+              )}
+            </div>
+            <div className='posts mt-4 d-flex flex-column gap-2'>
               {profile.posts?.map((post) => {
                 return (
                   <Post
