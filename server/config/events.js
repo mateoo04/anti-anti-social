@@ -7,7 +7,6 @@ const setUpSocketEvents = (io) => {
   ioInstance = io;
 
   events.on('newNotification', ({ notification }) => {
-    console.log('sending notif:', notification);
     if (!ioInstance) return;
 
     ioInstance

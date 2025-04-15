@@ -9,7 +9,7 @@ export default function ProfilesList({ users, onEmptyMessage }) {
     ? users.map((user) => {
         return (
           <Link
-            to={`/user/${user.id}`}
+            to={`/users/${user.id}`}
             className='text-decoration-none link'
             key={`user-${user.id}`}
           >
@@ -21,7 +21,7 @@ export default function ProfilesList({ users, onEmptyMessage }) {
                   className='profile-photo-md'
                 />
                 <div>
-                  <p>{user.firstName + ' ' + user.lastName}</p>
+                  <p>{`${user.firstName} ${user.lastName || ''}`}</p>
                   <p className='text-muted'>{user.username}</p>
                 </div>
               </div>

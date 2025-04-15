@@ -15,12 +15,13 @@ async function getAllUsers(req, res, next) {
           '%' + search + '%'
         }
         OR username LIKE ${'%' + search + '%'})
-        AND id != ${req.user.id}`;
+        AND id != ${req.user.id} LIMIT 15`;
     } else {
       users = await prisma.user.findMany({
         where: {
           NOT: [{ id: req.user.id }],
         },
+        take: 15,
       });
     }
 

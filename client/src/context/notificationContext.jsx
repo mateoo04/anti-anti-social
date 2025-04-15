@@ -8,11 +8,7 @@ const NotificationsContext = createContext();
 export function NotificationsProvider({ children }) {
   const { isAuthenticated, authenticatedUser } = useAuth();
   const [notifications, setNotifications] = useState([]);
-  const notificationsRef = useRef([]);
-
-  useEffect(() => {
-    notificationsRef.current = notifications;
-  }, [notifications]);
+  const joinedRoom = useRef('');
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -38,20 +34,29 @@ export function NotificationsProvider({ children }) {
   }, [isAuthenticated, authenticatedUser]);
 
   useEffect(() => {
-    const setUpSocket = () => {
-      socket.emit('joinRoom', `notifs-${authenticatedUser.id}`);
+    if (!isAuthenticated || !authenticatedUser?.id) return;
 
-      socket.on('newNotification', (notification) => {
-        if (
-          !notificationsRef.current.some((item) => item.id === notification.id)
-        ) {
-          setNotifications((prev) => [notification, ...prev]);
-        }
+    const room = `notifs-${authenticatedUser.id}`;
+
+    if (joinedRoom.current === room) return;
+
+    socket.emit('joinRoom', room);
+    joinedRoom.current = room;
+
+    const handleNewNotification = (notification) => {
+      setNotifications((prev) => {
+        if (prev.some((item) => item.id === notification.id)) return prev;
+        return [notification, ...prev];
       });
     };
 
-    if (isAuthenticated) setUpSocket();
-  }, [isAuthenticated, authenticatedUser]);
+    socket.on('newNotification', handleNewNotification);
+
+    return () => {
+      socket.off('newNotification', handleNewNotification);
+      socket.emit('leaveRoom', `notifs-${authenticatedUser.id}`);
+    };
+  }, [isAuthenticated, authenticatedUser?.id]);
 
   const markNotifsRead = () => {
     const markRead = async () => {

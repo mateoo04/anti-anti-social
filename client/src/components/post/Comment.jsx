@@ -9,7 +9,7 @@ export default function Comment({ comment, likeComment, unlikeComment }) {
     <div className='mt-3 mb-3 ps-2 pe-2 d-flex'>
       <div className='col'>
         <Link
-          to={`/user/${comment.authorId}`}
+          to={`/users/${comment.authorId}`}
           className='text-decoration-none d-flex justify-content-between align-items-start'
         >
           <div className='details d-flex gap-2 mb-1 align-items-center'>

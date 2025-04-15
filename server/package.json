@@ -7,7 +7,8 @@
     "test:reset-db": "dotenv -e .env.test -- npx prisma db push --force-reset",
     "test": "dotenv -e .env.test -- jest",
     "test:full": "npm run test:reset-db && npm run test",
-    "start": "node server.js"
+    "start": "node server.js",
+    "populate-db": "npx prisma generate && npx prisma migrate deploy"
   },
   "keywords": [],
   "author": "",

@@ -105,7 +105,7 @@ export default function EditPost() {
 
       if (!response.ok) throw new Error('Failed to save changes');
 
-      navigate(`/user/${authenticatedUser.id}`);
+      navigate(`/users/${authenticatedUser.id}`);
     } catch {
       toast.error('Failed to save changes');
     }
