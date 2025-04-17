@@ -3,19 +3,62 @@ const { events } = require('../config/events');
 
 const prisma = new PrismaClient();
 
-async function getPosts(req, res, next) {
-  try {
-    const [posts, likedBy] = await Promise.all([
-      prisma.post.findMany({
-        where: {
-          author: {
-            followers: {
-              some: {
-                followerId: req.user.id,
-              },
+async function getFollowingsPosts(req, res, next) {
+  const where = {
+    author: {
+      followers: {
+        some: {
+          followerId: req.user.id,
+        },
+      },
+    },
+  };
+
+  const orderBy = {
+    dateTime: 'desc',
+  };
+
+  return getPosts(req, res, next, where, orderBy);
+}
+
+async function getExplorePosts(req, res, next) {
+  const where = {
+    AND: [
+      {
+        author: {
+          followers: {
+            none: {
+              followerId: req.user.id,
             },
           },
         },
+      },
+      {
+        author: {
+          NOT: {
+            id: req.user.id,
+          },
+        },
+      },
+    ],
+  };
+
+  const orderBy = {
+    likedBy: {
+      _count: 'desc',
+    },
+  };
+
+  return getPosts(req, res, next, where, orderBy);
+}
+
+async function getPosts(req, res, next, where, orderBy) {
+  try {
+    const { cursor, limit = 10 } = req.query;
+
+    const [posts, likedBy] = await Promise.all([
+      prisma.post.findMany({
+        where,
         include: {
           author: {
             select: {
@@ -32,9 +75,12 @@ async function getPosts(req, res, next) {
             },
           },
         },
-        orderBy: {
-          dateTime: 'desc',
-        },
+        orderBy,
+        take: Number(limit) + 1,
+        ...(cursor && {
+          cursor: { id: cursor },
+          skip: 1,
+        }),
       }),
       prisma.post.findMany({
         where: {
@@ -54,15 +100,22 @@ async function getPosts(req, res, next) {
       }),
     ]);
 
+    let nextCursor = null;
+    if (posts.length > limit) {
+      const nextItem = posts.pop();
+      nextCursor = nextItem.id;
+    }
+
     const likedByAuthUser = likedBy.map((likedByItem) => likedByItem.id);
 
-    return res.json(
-      posts.map((post) => {
+    return res.json({
+      posts: posts.map((post) => {
         if (likedByAuthUser.includes(post.id))
           return { ...post, likedByAuthUser: true };
         else return { ...post, likedByAuthUser: false };
-      })
-    );
+      }),
+      nextCursor,
+    });
   } catch (err) {
     next(err);
   }
@@ -271,7 +324,8 @@ async function validatePostAuthor(req, res, postId) {
 module.exports = {
   createNewPost,
   getPostById,
-  getPosts,
+  getFollowingsPosts,
+  getExplorePosts,
   likePost,
   unlikePost,
   deletePost,
