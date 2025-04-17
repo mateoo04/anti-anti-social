@@ -25,13 +25,13 @@ p {
   height: 40px;
 }
 
-.search-icon {
+.search-icon,
+.home-icon {
   height: 24px;
 }
 
-.notif-button {
-  width: 34px;
-  height: 36px;
+.explore-icon {
+  height: 22px;
 }
 
 .notif-count {
@@ -50,7 +50,8 @@ p {
 }
 
 .bell-icon {
-  height: 22px;
+  padding-top: 2px;
+  height: 23px;
 }
 
 .profile-photo-lg {
@@ -223,6 +224,30 @@ img {
     width: 100%;
     max-width: none;
   }
+
+  .header-full-name {
+    display: none;
+  }
+}
+
+.nav-link {
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.nav-link p {
+  font-size: 13px;
+}
+
+.loader-ref-div {
+  height: 80px;
+}
+
+.loader-container-small {
+  height: 80px;
 }
 
 .loader-container {
@@ -232,10 +257,18 @@ img {
   transform: translate(-50%, -50%);
 }
 
-.loader {
-  display: inline-block;
+.loader-small {
+  width: 30px;
+  height: 30px;
+}
+
+.loader-normal {
   width: 48px;
   height: 48px;
+}
+
+.loader {
+  display: inline-block;
   border-radius: 50%;
   position: relative;
   animation: rotate 1s linear infinite;

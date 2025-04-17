@@ -31,7 +31,6 @@ export default function Search() {
   }, [search]);
   return (
     <>
-      <Header authenticatedUser={authenticatedUser}></Header>
       <main className='container'>
         <h1>Search</h1>
         <input

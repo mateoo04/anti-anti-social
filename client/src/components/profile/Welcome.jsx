@@ -65,7 +65,6 @@ export default function Welcome() {
 
   return (
     <>
-      <Header></Header>
       <main className='container'>
         <h1>
           Welcome, {authenticatedUser.firstName} {authenticatedUser.lastName}!

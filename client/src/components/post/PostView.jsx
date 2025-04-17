@@ -33,10 +33,9 @@ export default function PostView() {
 
   return (
     <>
-      <Header />
       {isLoading ? (
         <div className='loader-container'>
-          <span className='loader'></span>
+          <span className='loader loader-normal'></span>
         </div>
       ) : (
         <div className='container'>

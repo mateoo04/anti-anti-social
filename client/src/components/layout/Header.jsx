@@ -1,12 +1,18 @@
 import logo from '../../assets/logo.png';
-import searchIcon from '../../assets/icons/people.svg';
+import peopleIcon from '../../assets/icons/nav/people.svg';
+import peopleFillIcon from '../../assets/icons/nav/people-fill.svg';
+import bellIcon from '../../assets/icons/nav/bell.svg';
+import bellFillIcon from '../../assets/icons/nav/bell-fill.svg';
+import homeIcon from '../../assets/icons/nav/house.svg';
+import homeFillIcon from '../../assets/icons/nav/house-fill.svg';
+import compassIcon from '../../assets/icons/nav/compass.svg';
+import compassFillIcon from '../../assets/icons/nav/compass-fill.svg';
 import personIcon from '../../assets/icons/person-circle.svg';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/authContext';
 import { toast } from 'react-toastify';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Notifications from '../notifications/Notifications';
-import { NotificationsProvider } from '../../context/notificationContext';
 import NotificationsBell from '../notifications/NotificationsBell';
 import socket from '../../utils/socket';
 
@@ -15,6 +21,11 @@ export default function Header() {
     useAuth();
   const navigate = useNavigate();
   const [openNotifications, setOpenNotifications] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location);
+  });
 
   const logOut = async () => {
     try {
@@ -39,11 +50,37 @@ export default function Header() {
       <Link to='/'>
         <img src={logo} alt='anti-anti-social logo' className='logo' />
       </Link>
-      <nav className='d-flex align-items-center'>
-        <Link to='/users'>
-          <img src={searchIcon} alt='' className='search-icon' />
+      <nav className='d-flex gap-2 align-items-center'>
+        <Link to='/' className='nav-link'>
+          <img
+            src={location.pathname == '/' ? homeFillIcon : homeIcon}
+            alt=''
+            className='home-icon'
+          />
+          <p>Home</p>
         </Link>
-        <NotificationsBell setOpenNotifications={setOpenNotifications} />
+        <Link to='/explore' className='nav-link'>
+          <img
+            src={
+              location.pathname == '/explore' ? compassFillIcon : compassIcon
+            }
+            alt=''
+            className='explore-icon'
+          />
+          <p>Explore</p>
+        </Link>
+        <Link to='/users' className='nav-link'>
+          <img
+            src={location.pathname == '/users' ? peopleFillIcon : peopleIcon}
+            alt=''
+            className='search-icon'
+          />
+          <p>Users</p>
+        </Link>
+        <NotificationsBell
+          icon={openNotifications ? bellFillIcon : bellIcon}
+          setOpenNotifications={setOpenNotifications}
+        />
         {isAuthenticated && (
           <div className='dropdown'>
             <button
@@ -55,7 +92,7 @@ export default function Header() {
                 alt=''
                 className='profile-photo-sm'
               />
-              <p className='mb-0'>
+              <p className='mb-0 header-full-name'>
                 {`${authenticatedUser.firstName} ${
                   authenticatedUser.lastName || ''
                 }`}
