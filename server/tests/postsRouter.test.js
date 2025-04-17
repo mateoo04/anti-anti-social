@@ -55,10 +55,24 @@ describe('Post tests', () => {
 
     expect(response.statusCode).toBe(200);
 
-    const posts = response.body;
+    const body = response.body;
 
-    expect(posts).toHaveLength(1);
-    expect(posts.at(0).content).toBe('Test post');
+    expect(body.posts).toHaveLength(1);
+    expect(body.posts.at(0).content).toBe('Test post');
+  });
+
+  test('User C gets explore posts', async () => {
+    const response = await request(app)
+      .get(`/api/posts/explore`)
+      .set('Cookie', userC.authTokenCookie)
+      .send();
+
+    expect(response.statusCode).toBe(200);
+
+    const body = response.body;
+
+    expect(body.posts).toHaveLength(1);
+    expect(body.posts.at(0).content).toBe('Test post');
   });
 });
 

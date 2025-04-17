@@ -2,17 +2,19 @@ const { Router } = require('express');
 const {
   getPostById,
   createNewPost,
-  getPosts,
+  getFollowingsPosts,
   likePost,
   unlikePost,
   deletePost,
   updatePost,
+  getExplorePosts,
 } = require('../controllers/postsController');
 const commentsRouter = require('./commentsRouter');
 
 const postsRouter = Router();
 
-postsRouter.get('/', getPosts);
+postsRouter.get('/', getFollowingsPosts);
+postsRouter.get('/explore', getExplorePosts);
 postsRouter.get('/:postId', getPostById);
 
 postsRouter.post('/new', createNewPost);
