@@ -133,7 +133,6 @@ export default function EditProfile() {
 
   return (
     <>
-      <Header></Header>
       <main className='container'>
         {Object.values(errors).length ? (
           <div className='bg-warning rounded-4 p-3 mb-3'>

@@ -34,7 +34,6 @@ export default function Profile() {
 
   return (
     <>
-      <Header></Header>
       <main className='container'>
         {Object.keys(profile).length ? (
           <>
@@ -55,7 +54,7 @@ export default function Profile() {
               </div>
             </div>
             <p className='mb-2 preserve-newlines'>{profile.bio}</p>
-            <div className='follow-stats d-flex gap-3'>
+            <div className='follow-stats d-flex gap-3 pb-2'>
               <Link
                 to={`/users/${userId}/follows`}
                 className='text-decoration-none'
@@ -72,7 +71,7 @@ export default function Profile() {
             {profile.id != authenticatedUser.id &&
               (authenticatedUser.following?.includes(profile.id) ? (
                 <button
-                  className='btn bg-white border text-black unfollow-btn'
+                  className='btn bg-white border text-black unfollow-btn rounded-5'
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -84,7 +83,7 @@ export default function Profile() {
                 </button>
               ) : (
                 <button
-                  className='btn bg-primary text-white follow-btn'
+                  className='btn bg-primary text-white follow-btn rounded-5'
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -138,7 +137,7 @@ export default function Profile() {
           </>
         ) : (
           <div className='loader-container'>
-            <span className='loader'></span>
+            <span className='loader loader-normal'></span>
           </div>
         )}
       </main>

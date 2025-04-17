@@ -70,7 +70,7 @@ export default function EditPost() {
 
       if (!response.ok) throw new Error('Failed to post');
 
-      navigate('/');
+      navigate(`/users/${authenticatedUser.id}`);
     } catch {
       toast.error('Failed to post');
     }
@@ -123,7 +123,6 @@ export default function EditPost() {
 
   return (
     <>
-      <Header></Header>
       <main className='container'>
         <h1>{postId ? 'Edit post' : 'New post'}</h1>
         <form

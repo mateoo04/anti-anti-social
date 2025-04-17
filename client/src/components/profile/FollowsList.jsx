@@ -35,7 +35,6 @@ export default function FollowsList() {
 
   return (
     <>
-      <Header></Header>
       <main className='container'>
         {profile.username && (
           <div className='d-flex gap-3'>

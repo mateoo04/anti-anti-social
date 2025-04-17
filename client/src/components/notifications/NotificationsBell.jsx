@@ -1,7 +1,6 @@
-import bellIcon from '../../assets/icons/bell.svg';
 import { useNotifs } from '../../context/notificationContext';
 
-export default function NotificationsBell({ setOpenNotifications }) {
+export default function NotificationsBell({ setOpenNotifications, icon }) {
   const { notifications, markNotifsRead } = useNotifs();
 
   const getNotifsCount = () => {
@@ -15,14 +14,15 @@ export default function NotificationsBell({ setOpenNotifications }) {
 
   return (
     <button
-      className='btn p-0 border-0 notif-button position-relative'
+      className='nav-link position-relative'
       onClick={() => {
         setOpenNotifications(true);
         markNotifsRead();
       }}
     >
-      <img src={bellIcon} className='bell-icon' alt='' />
+      <img src={icon} className='bell-icon' alt='' />
       {getNotifsCount()}
+      <p>Notifs</p>
     </button>
   );
 }
