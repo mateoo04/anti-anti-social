@@ -42,7 +42,7 @@ export default function PostCarousel() {
   return (
     <>
       <main className='container d-flex flex-column'>
-        <div className='posts d-flex flex-column gap-2'>
+        <div className='posts d-flex flex-column gap-3'>
           {posts.length ? (
             <>
               {posts?.map((post) => {
@@ -84,7 +84,7 @@ export default function PostCarousel() {
             <p className='text-center'>
               Follow other users to see posts.{' '}
               <Link
-                className='text-secondary text-decoration-none link link-hover-decoration'
+                className='text-primary text-decoration-none link link-hover-decoration'
                 to={'/users'}
               >
                 Click here to find accounts to follow!

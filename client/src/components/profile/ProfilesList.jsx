@@ -13,7 +13,7 @@ export default function ProfilesList({ users, onEmptyMessage }) {
             className='text-decoration-none link'
             key={`user-${user.id}`}
           >
-            <div className='d-flex align-items-center justify-content-between'>
+            <div className='d-flex align-items-center justify-content-between pt-1 pb-1'>
               <div className='d-flex align-items-center gap-3'>
                 <img
                   src={user.profileImageUrl || personSvg}
@@ -21,13 +21,15 @@ export default function ProfilesList({ users, onEmptyMessage }) {
                   className='profile-photo-md'
                 />
                 <div>
-                  <p>{`${user.firstName} ${user.lastName || ''}`}</p>
-                  <p className='text-muted'>{user.username}</p>
+                  <p className='text-black'>{`${user.firstName} ${
+                    user.lastName || ''
+                  }`}</p>
+                  <p className='text-primary'>@{user.username}</p>
                 </div>
               </div>
               {authenticatedUser.following?.includes(user.id) ? (
                 <button
-                  className='btn bg-white border text-black unfollow-btn'
+                  className='btn bg-white border text-black unfollow-btn rounded-5'
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -38,7 +40,7 @@ export default function ProfilesList({ users, onEmptyMessage }) {
                 </button>
               ) : (
                 <button
-                  className='btn bg-primary text-white follow-btn'
+                  className='btn bg-secondary text-white follow-btn rounded-5'
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();

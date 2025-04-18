@@ -1,10 +1,20 @@
-import { Link, Navigate, Outlet, useLocation } from 'react-router-dom';
+import {
+  Link,
+  Navigate,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import Header from './layout/Header';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Notifications from './notifications/Notifications';
+import Navigation from './layout/Navigation';
 
 export default function ProtectedRoute() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const [openNotifications, setOpenNotifications] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -15,13 +25,27 @@ export default function ProtectedRoute() {
   }
   return (
     <>
-      <Header></Header>
+      <Header
+        openNotifications={openNotifications}
+        setOpenNotifications={setOpenNotifications}
+      ></Header>
+      <Notifications
+        openNotifications={openNotifications}
+        setOpenNotifications={setOpenNotifications}
+      />
+      <div className='small-screen-nav'>
+        <Navigation
+          openNotifications={openNotifications}
+          setOpenNotifications={setOpenNotifications}
+        />
+      </div>
       <Outlet />
-      {pathname !== '/edit-profile' && (
-        <button className='create-button btn bg-secondary p-0 pb-1 border-0'>
-          <Link to={'/posts/new'} className='text-decoration-none text-white'>
-            <b>+</b>
-          </Link>
+      {pathname !== '/edit-profile' && pathname !== '/users' && (
+        <button
+          className='create-button btn bg-primary p-0 border-0 text-white'
+          onClick={() => navigate('/posts/new')}
+        >
+          +
         </button>
       )}
     </>

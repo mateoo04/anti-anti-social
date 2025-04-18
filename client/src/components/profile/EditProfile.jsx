@@ -163,7 +163,7 @@ export default function EditProfile() {
                 id='file-input'
                 type='file'
                 name='file'
-                className='form-control mb-3'
+                className='rounded-5 form-control mb-3'
                 {...register('file')}
                 onChange={(e) => {
                   setSelectedPhoto(e.target.files[0]);
@@ -178,7 +178,7 @@ export default function EditProfile() {
               name='firstName'
               id='firstName'
               {...register('firstName')}
-              className='form-control mb-3'
+              className='rounded-5 ps-3 pe-3 form-control mb-3'
             />
           </label>
           <label htmlFor='lastName'>
@@ -188,7 +188,7 @@ export default function EditProfile() {
               name='lastName'
               id='lastName'
               {...register('lastName')}
-              className='form-control mb-3'
+              className='rounded-5 ps-3 pe-3 form-control mb-3'
             />
           </label>
           <label htmlFor='username'>
@@ -198,7 +198,7 @@ export default function EditProfile() {
               name='username'
               id='username'
               {...register('username')}
-              className='form-control mb-3'
+              className='rounded-5 ps-3 pe-3 form-control mb-3'
             />
           </label>
           <label htmlFor='bio'>
@@ -207,13 +207,13 @@ export default function EditProfile() {
               name='bio'
               id='bio'
               {...register('bio')}
-              className='form-control mb-3'
+              className='rounded-5 p-3 form-control mb-3'
             ></textarea>
           </label>
           <input
             type='submit'
             value='SAVE CHANGES'
-            className='btn bg-primary text-white'
+            className='btn rounded-5 pt-2 pb-2 bg-secondary text-white'
           />
         </form>
       </main>

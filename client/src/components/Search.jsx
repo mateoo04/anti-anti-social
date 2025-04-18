@@ -38,7 +38,7 @@ export default function Search() {
           id='userSearch'
           name='userSearch'
           onChange={(e) => setSearch(e.target.value)}
-          className='form-control mb-3'
+          className='form-control mb-3 rounded-5 ps-3 pe-3'
         />
         <ProfilesList
           authenticatedUser={authenticatedUser}

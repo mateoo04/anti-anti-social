@@ -190,7 +190,7 @@ export default function Post({
     }
   };
   return (
-    <div className='border rounded-4 pt-4 ps-4 pe-4 pb-3'>
+    <div className='border-0 rounded-5 pt-4 ps-4 pe-4 pb-3 post-card'>
       <Link to={`/users/${authorId}`} className='text-decoration-none'>
         <div className='details d-flex gap-3 mb-3 align-items-center'>
           <img
@@ -199,8 +199,10 @@ export default function Post({
             className='profile-photo-md'
           />
           <div className='d-flex flex-column'>
-            <h2 className='mb-0 h4'>{`${firstName} ${lastName || ''}`}</h2>
-            <p className='text-muted'>{username}</p>
+            <h2 className='text-secondary mb-0 h4'>{`${firstName} ${
+              lastName || ''
+            }`}</h2>
+            <p className='text-primary'>@{username}</p>
           </div>
         </div>
       </Link>
@@ -249,7 +251,7 @@ export default function Post({
               </li>
               <li className='dropdown-item'>
                 <button
-                  className='text-decoration-none text-primary bg-transparent border-0 p-0'
+                  className='text-decoration-none text-secondary bg-transparent border-0 p-0'
                   onClick={() => navigate(`/posts/${postId}/edit`)}
                 >
                   Edit post
@@ -283,7 +285,7 @@ export default function Post({
           </label>
           <button
             type='submit'
-            className='bg-secondary text-white border-0 post-comment-btn'
+            className='bg-primary text-white border-0 post-comment-btn'
           >
             <img src={sendSvg} alt='' />
           </button>
