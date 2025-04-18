@@ -13,12 +13,12 @@ const editUserSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters long'),
   lastName: z.string().min(2, 'Last name must be at least 2 characters long'),
   username: z.string().min(2, 'Username must be at least 2 characters long'),
-  bio: z.optional(
-    z
-      .string()
-      .min(2, 'Bio must be at least 2 characters long')
-      .max(50, 'Bio cannot be longer than 50 characters')
-  ),
+  bio: z
+    .string()
+    .min(2, 'Bio must be at least 2 characters long')
+    .max(200, 'Bio cannot be longer than 200 characters')
+    .nullable()
+    .optional(),
   file: z
     .optional(z.instanceof(FileList))
     .transform((fileList) => {

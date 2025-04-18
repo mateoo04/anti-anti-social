@@ -206,10 +206,10 @@ export default function Post({
           </div>
         </div>
       </Link>
-      <p className='pb-2'>{content}</p>
+      <p className='pb-2 preserve-newlines'>{content}</p>
       {photoUrl && (
         <div className='post-photo-container d-flex justify-content-center'>
-          <img src={photoUrl} alt='' className='post-photo mb-3' />
+          <img src={photoUrl} alt='' className='post-photo mb-3 rounded-4' />
         </div>
       )}
       <p className='text-muted pt-3'>{formatDateTime(dateTime)}</p>
@@ -277,7 +277,7 @@ export default function Post({
             <textarea
               name='content'
               id='content'
-              className='form-control'
+              className='form-control rounded-4'
               rows={2}
               onChange={(e) => setNewCommentText(e.target.value)}
               value={newCommentText}

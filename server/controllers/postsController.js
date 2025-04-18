@@ -92,13 +92,7 @@ async function getPosts(req, res, next, where, orderBy) {
       }),
       prisma.post.findMany({
         where: {
-          author: {
-            followers: {
-              some: {
-                followerId: req.user.id,
-              },
-            },
-          },
+          ...where,
           likedBy: {
             some: {
               id: req.user.id,
@@ -114,7 +108,7 @@ async function getPosts(req, res, next, where, orderBy) {
       nextCursor = nextItem.id;
     }
 
-    const likedByAuthUser = likedBy.map((likedByItem) => likedByItem.id);
+    const likedByAuthUser = await likedBy.map((likedByItem) => likedByItem.id);
 
     return res.json({
       posts: posts.map((post) => {

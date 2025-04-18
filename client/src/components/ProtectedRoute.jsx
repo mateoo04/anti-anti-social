@@ -10,10 +10,12 @@ import Header from './layout/Header';
 import { useEffect, useState } from 'react';
 import Notifications from './notifications/Notifications';
 import Navigation from './layout/Navigation';
+import { useAuth } from '../context/authContext';
 
 export default function ProtectedRoute() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { authenticatedUser } = useAuth();
   const [openNotifications, setOpenNotifications] = useState(false);
 
   useEffect(() => {
@@ -40,7 +42,9 @@ export default function ProtectedRoute() {
         />
       </div>
       <Outlet />
-      {pathname !== '/edit-profile' && pathname !== '/users' && (
+      {['/', '/explore', `/users/${authenticatedUser.id}`].includes(
+        pathname
+      ) && (
         <button
           className='create-button btn bg-primary p-0 border-0 text-white'
           onClick={() => navigate('/posts/new')}
