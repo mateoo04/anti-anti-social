@@ -19,7 +19,7 @@ export default function Comment({ comment, likeComment, unlikeComment }) {
               className='profile-photo-sm'
             />
             <div className='d-flex comment-name-time-container'>
-              <p className='mb-0 h6 text-secondary'>
+              <p className='mb-0 h6 text-black'>
                 {comment.author.firstName + ' ' + comment.author.lastName}
               </p>
               <p className='text-muted'>{formatDateTime(comment.dateTime)}</p>
