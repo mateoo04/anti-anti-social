@@ -88,7 +88,7 @@ export default function SignUp() {
               name='firstName'
               id='firstName'
               {...register('firstName')}
-              className='form-control mb-3'
+              className='form-control mb-3 rounded-5 ps-3 pe-3'
             />
           </label>
           <label htmlFor='lastName'>
@@ -98,7 +98,7 @@ export default function SignUp() {
               name='lastName'
               id='lastName'
               {...register('lastName')}
-              className='form-control mb-3'
+              className='form-control mb-3 rounded-5 ps-3 pe-3'
             />
           </label>
           <label htmlFor='username'>
@@ -108,7 +108,7 @@ export default function SignUp() {
               name='username'
               id='username'
               {...register('username')}
-              className='form-control mb-3'
+              className='form-control mb-3 rounded-5 ps-3 pe-3'
             />
           </label>
           <label htmlFor='password'>
@@ -119,7 +119,7 @@ export default function SignUp() {
               id='password'
               autoComplete='new-password'
               {...register('password')}
-              className='form-control mb-3'
+              className='form-control mb-3 rounded-5 ps-3 pe-3'
             />
           </label>
           <label htmlFor='confirmPassword'>
@@ -130,7 +130,7 @@ export default function SignUp() {
               id='confirmPassword'
               autoComplete='new-password'
               {...register('confirmPassword')}
-              className='form-control mb-3'
+              className='form-control mb-3 rounded-5 ps-3 pe-3'
             />
           </label>
         </form>
@@ -138,12 +138,12 @@ export default function SignUp() {
           <input
             form='sign-up-form'
             type='submit'
-            className='btn bg-primary text-white'
+            className='btn bg-primary text-white rounded-5 ps-3 pe-3'
             value={'Sign up'}
           />
           <AuthOptions />
         </div>
-        <p className='text-center'>
+        <p className='text-center mt-2 pb-5'>
           Already a user? <Link to='/auth/log-in'>Log in here</Link>
         </p>
       </main>

@@ -19,7 +19,11 @@ import PostCarousel from './post/PostCarousel';
 import { explorePageLoader } from '../loaders/explorePageLoader';
 
 function HydrateFallback() {
-  return <div>Loading...</div>;
+  return (
+    <div className='loader-container'>
+      <span className='loader loader-normal'></span>
+    </div>
+  );
 }
 
 const router = createBrowserRouter([

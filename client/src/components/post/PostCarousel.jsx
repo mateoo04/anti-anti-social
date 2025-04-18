@@ -1,12 +1,10 @@
 import { Link, useLoaderData, useLocation } from 'react-router-dom';
 import Post from './Post';
-import { useAuth } from '../../context/authContext';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import useInfiniteScroll from '../../hooks/infiniteScrollHook';
 
 export default function PostCarousel() {
   const loaderData = useLoaderData();
-  const { authenticatedUser } = useAuth();
   const location = useLocation();
   const isExplorePage = location.pathname === '/explore';
 
@@ -25,12 +23,16 @@ export default function PostCarousel() {
         );
         return response.json();
       },
-      getNextPageParam: (lastPage) => lastPage.nextCursor ?? false,
+      getNextPageParam: (lastPage) => {
+        if (lastPage?.nextCursor) return lastPage.nextCursor;
+        return undefined;
+      },
       initialData: {
         pageParams: [null],
         pages: [loaderData],
       },
       suspense: false,
+      enabled: !!loaderData,
     });
 
   const loaderRef = useInfiniteScroll(() => {
@@ -38,12 +40,13 @@ export default function PostCarousel() {
   });
 
   const posts = data.pages.flatMap((page) => page.posts);
+  const isEmpty = posts.length === 0 && !hasNextPage;
 
   return (
     <>
       <main className='container d-flex flex-column'>
         <div className='posts d-flex flex-column gap-3'>
-          {posts.length ? (
+          {!isEmpty ? (
             <>
               {posts?.map((post) => {
                 return (
@@ -71,24 +74,26 @@ export default function PostCarousel() {
               >
                 {hasNextPage && isFetchingNextPage && (
                   <div className='d-flex justify-content-center align-items-center loader-container-small'>
-                    <span className='loader loader-small'></span>
+                    Loading...<span className='loader loader-small'></span>
                   </div>
                 )}
               </div>
             </>
-          ) : authenticatedUser.following.length ? (
+          ) : hasNextPage ? (
             <div className='loader-container'>
               <span className='loader loader-normal'></span>
             </div>
           ) : (
             <p className='text-center'>
-              Follow other users to see posts.{' '}
-              <Link
-                className='text-primary text-decoration-none link link-hover-decoration'
-                to={'/users'}
-              >
-                Click here to find accounts to follow!
-              </Link>
+              Nothing to see here.{' '}
+              {!isExplorePage && (
+                <Link
+                  className='text-primary text-decoration-none link link-hover-decoration'
+                  to={'/users'}
+                >
+                  Click here to find accounts to follow!
+                </Link>
+              )}
             </p>
           )}
         </div>
