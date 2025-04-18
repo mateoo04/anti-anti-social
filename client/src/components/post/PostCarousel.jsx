@@ -21,7 +21,8 @@ export default function PostCarousel() {
             credentials: 'include',
           }
         );
-        return response.json();
+        const json = await response.json();
+        return json;
       },
       getNextPageParam: (lastPage) => {
         if (lastPage?.nextCursor) return lastPage.nextCursor;
@@ -74,7 +75,7 @@ export default function PostCarousel() {
               >
                 {hasNextPage && isFetchingNextPage && (
                   <div className='d-flex justify-content-center align-items-center loader-container-small'>
-                    Loading...<span className='loader loader-small'></span>
+                    <span className='loader loader-small'></span>
                   </div>
                 )}
               </div>
