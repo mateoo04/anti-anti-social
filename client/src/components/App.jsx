@@ -18,6 +18,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PostCarousel from './post/PostCarousel';
 import { explorePageLoader } from '../loaders/explorePageLoader';
 
+function HydrateFallback() {
+  return <div>Loading...</div>;
+}
+
 const router = createBrowserRouter([
   { path: '/auth/log-in', element: <LogIn /> },
   { path: '/auth/sign-up', element: <SignUp /> },
@@ -26,8 +30,18 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     errorElement: <NotFound />,
     children: [
-      { index: true, loader: homePageLoader, element: <PostCarousel /> },
-      { path: 'explore', loader: explorePageLoader, element: <PostCarousel /> },
+      {
+        index: true,
+        loader: homePageLoader,
+        element: <PostCarousel />,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: 'explore',
+        loader: explorePageLoader,
+        element: <PostCarousel />,
+        hydrateFallbackElement: <HydrateFallback />,
+      },
       {
         path: 'welcome',
         element: <Welcome />,

@@ -1,10 +1,8 @@
 import { Link, useLoaderData, useLocation } from 'react-router-dom';
-import Header from '../layout/Header';
 import Post from './Post';
 import { useAuth } from '../../context/authContext';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import useInfiniteScroll from '../../hooks/infiniteScrollHook';
-import { useEffect, useState } from 'react';
 
 export default function PostCarousel() {
   const loaderData = useLoaderData();
@@ -32,6 +30,7 @@ export default function PostCarousel() {
         pageParams: [null],
         pages: [loaderData],
       },
+      suspense: false,
     });
 
   const loaderRef = useInfiniteScroll(() => {
@@ -43,13 +42,7 @@ export default function PostCarousel() {
   return (
     <>
       <main className='container d-flex flex-column'>
-        <Link
-          to={'/posts/new'}
-          className='align-self-center text-decoration-none btn rounded-5 bg-secondary text-white'
-        >
-          <b>+</b> NEW POST
-        </Link>
-        <div className='posts mt-5 d-flex flex-column gap-2'>
+        <div className='posts d-flex flex-column gap-2'>
           {posts.length ? (
             <>
               {posts?.map((post) => {
@@ -76,7 +69,7 @@ export default function PostCarousel() {
                 key={'loader-ref'}
                 ref={loaderRef}
               >
-                {isFetchingNextPage && (
+                {hasNextPage && isFetchingNextPage && (
                   <div className='d-flex justify-content-center align-items-center loader-container-small'>
                     <span className='loader loader-small'></span>
                   </div>

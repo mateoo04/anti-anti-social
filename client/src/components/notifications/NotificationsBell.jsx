@@ -22,7 +22,7 @@ export default function NotificationsBell({ setOpenNotifications, icon }) {
     >
       <img src={icon} className='bell-icon' alt='' />
       {getNotifsCount()}
-      <p>Notifs</p>
+      <p>Inbox</p>
     </button>
   );
 }
