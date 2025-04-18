@@ -51,7 +51,7 @@ export default function FollowsList() {
         <ul className='nav nav-underline mb-3'>
           <li className='nav-item'>
             <button
-              className='nav-link active'
+              className='nav-link active text-black'
               id='nav-followers-tab'
               data-bs-toggle='tab'
               data-bs-target='#nav-followers'
@@ -65,7 +65,7 @@ export default function FollowsList() {
           </li>
           <li className='nav-item'>
             <button
-              className='nav-link'
+              className='nav-link text-black'
               id='nav-following-tab'
               data-bs-toggle='tab'
               data-bs-target='#nav-following'

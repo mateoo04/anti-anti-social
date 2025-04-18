@@ -14,9 +14,12 @@ async function getFollowingsPosts(req, res, next) {
     },
   };
 
-  const orderBy = {
-    dateTime: 'desc',
-  };
+  const orderBy = [
+    {
+      dateTime: 'desc',
+    },
+    { author: { username: 'asc' } },
+  ];
 
   return getPosts(req, res, next, where, orderBy);
 }
@@ -43,11 +46,17 @@ async function getExplorePosts(req, res, next) {
     ],
   };
 
-  const orderBy = {
-    likedBy: {
-      _count: 'desc',
+  const orderBy = [
+    {
+      likedBy: {
+        _count: 'desc',
+      },
     },
-  };
+    {
+      dateTime: 'desc',
+    },
+    { author: { username: 'asc' } },
+  ];
 
   return getPosts(req, res, next, where, orderBy);
 }
@@ -79,7 +88,6 @@ async function getPosts(req, res, next, where, orderBy) {
         take: Number(limit) + 1,
         ...(cursor && {
           cursor: { id: cursor },
-          skip: 1,
         }),
       }),
       prisma.post.findMany({
