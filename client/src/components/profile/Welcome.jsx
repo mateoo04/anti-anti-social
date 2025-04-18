@@ -111,7 +111,7 @@ export default function Welcome() {
           <input
             type='submit'
             value='SAVE'
-            className='btn bg-primary text-white'
+            className='btn bg-secondary text-white'
           />
         </form>
       </main>

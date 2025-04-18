@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/authContext';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo.svg';
 import AuthOptions from './AuthOptions';
 
 const logInSchema = z.object({
@@ -99,7 +99,7 @@ export default function LogIn() {
             form='login-form'
             type='submit'
             value='Log in'
-            className='btn bg-secondary text-white auth-btn w-100'
+            className='btn bg-primary text-white auth-btn w-100'
           />
           <AuthOptions />
         </div>

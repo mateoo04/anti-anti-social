@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { z } from 'zod';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/authContext';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo.svg';
 import AuthOptions from './AuthOptions';
 
 const createUserSchema = z
@@ -138,7 +138,7 @@ export default function SignUp() {
           <input
             form='sign-up-form'
             type='submit'
-            className='btn bg-secondary text-white'
+            className='btn bg-primary text-white'
             value={'Sign up'}
           />
           <AuthOptions />

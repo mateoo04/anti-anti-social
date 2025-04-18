@@ -94,7 +94,7 @@ export default function Notifications({
               );
             })
           ) : (
-            <p>No new notifications 💤</p>
+            <p>No new notifications</p>
           )}
         </div>
       </div>

@@ -7,7 +7,7 @@ export default function NotFound() {
       <main className='container d-flex justify-content-center'>
         <div className='mt-5'>
           <h2>Page not found</h2>
-          <Link className='text-secondary' to='/'>
+          <Link className='text-primary' to='/'>
             Go to the Home screen
           </Link>
         </div>

@@ -1,3 +1,40 @@
-$primary: #4a4849;
-$secondary: #70355d;
+$primary: #db222a;
+$secondary: #4a4849;
 @import '~bootstrap/scss/bootstrap';
+
+@mixin sleek-background {
+  background: rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(10px);
+}
+
+header {
+  @include sleek-background;
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 700px) {
+  .header-nav {
+    display: block !important;
+  }
+  .small-screen-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 701px) {
+  .header-nav {
+    display: none !important;
+  }
+  .small-screen-nav {
+    display: block !important;
+  }
+
+  .create-button {
+    bottom: 80px !important;
+  }
+
+  .main-nav {
+    @include sleek-background;
+  }
+}

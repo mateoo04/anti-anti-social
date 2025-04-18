@@ -136,16 +136,16 @@ export default function EditPost() {
             <textarea
               name='content'
               id='content'
-              className='form-control'
-              rows={5}
+              className='rounded-5 p-3 form-control'
+              rows={7}
               value={content}
               onChange={(e) => setContent(e.target.value)}
             ></textarea>
           </label>
           {isAddingPhoto ? (
-            <div className='d-flex flex-column mt-3 d-flex gap-1 align-items-start border border-1 rounded-3 pb-3'>
+            <div className='rounded-5 d-flex flex-column mt-3 d-flex gap-1 align-items-start border border-1 rounded-3 pb-3'>
               <button
-                className='btn align-self-end'
+                className='btn align-self-end me-2'
                 type='btn'
                 onClick={() => setIsAddingPhoto(false)}
               >
@@ -165,7 +165,7 @@ export default function EditPost() {
                   id='file-input'
                   type='file'
                   name='file'
-                  className='form-control'
+                  className='rounded-5 form-control'
                   onChange={(e) => {
                     setFile(e.target.files[0]);
                     setSelectedPhoto(e.target.files[0]);
@@ -185,7 +185,7 @@ export default function EditPost() {
           <input
             type='submit'
             value={postId ? 'SAVE' : 'POST'}
-            className='btn bg-secondary text-white ps-4 pe-4 pt-2 pb-2 rounded-5 mt-3 mb-2  '
+            className='post-btn btn bg-primary text-white ps-4 pe-4 pt-2 pb-2 rounded-5 mt-3 mb-2  '
           />
         </form>
       </main>

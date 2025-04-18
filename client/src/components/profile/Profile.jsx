@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import personSvg from '../../assets/icons/person-circle.svg';
-import Header from '../layout/Header';
 import Post from '../post/Post';
 import { useAuth } from '../../context/authContext';
 
@@ -10,6 +9,7 @@ export default function Profile() {
   const { userId } = useParams();
   const [profile, setProfile] = useState({});
   const { authenticatedUser, follow, unfollow } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -50,26 +50,26 @@ export default function Profile() {
                 <h1 className='mb-1'>
                   {`${profile.firstName} ${profile.lastName || ''}`}
                 </h1>
-                <p className='text-muted'>{profile.username}</p>
+                <p className='text-primary'>@{profile.username}</p>
               </div>
             </div>
             <p className='mb-2 preserve-newlines'>{profile.bio}</p>
             <div className='follow-stats d-flex gap-3 pb-2'>
               <Link
                 to={`/users/${userId}/follows`}
-                className='text-decoration-none'
+                className='text-decoration-none text-secondary'
               >
                 <p>{`${profile._count?.followers} followers`}</p>
               </Link>
               <Link
                 to={`/users/${userId}/follows`}
-                className='text-decoration-none'
+                className='text-decoration-none text-secondary'
               >
                 <p>{`${profile._count?.following} following`}</p>
               </Link>
             </div>
-            {profile.id != authenticatedUser.id &&
-              (authenticatedUser.following?.includes(profile.id) ? (
+            {profile.id != authenticatedUser.id ? (
+              authenticatedUser.following?.includes(profile.id) ? (
                 <button
                   className='btn bg-white border text-black unfollow-btn rounded-5'
                   onClick={(e) => {
@@ -83,7 +83,7 @@ export default function Profile() {
                 </button>
               ) : (
                 <button
-                  className='btn bg-primary text-white follow-btn rounded-5'
+                  className='btn bg-secondary text-white follow-btn rounded-5'
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -93,34 +93,46 @@ export default function Profile() {
                 >
                   Follow
                 </button>
-              ))}
+              )
+            ) : (
+              <button
+                className='btn rounded-5 bg-primary text-white'
+                onClick={() => navigate('/edit-profile')}
+              >
+                Edit profile
+              </button>
+            )}
             <div className='posts mt-4 d-flex flex-column gap-2'>
-              {profile.posts?.map((post) => {
-                return (
-                  <Post
-                    authorId={profile.id}
-                    firstName={profile.firstName}
-                    lastName={profile.lastName}
-                    username={profile.username}
-                    profileImageUrl={profile.profileImageUrl}
-                    dateTime={post.dateTime}
-                    postId={post.id}
-                    content={post.content}
-                    photoUrl={post.photoUrl}
-                    initialLikeCount={post._count?.likedBy}
-                    initialIsLikedByAuthUser={post.likedByAuthUser}
-                    key={'profile-posts-' + post.id}
-                    removePost={() =>
-                      setProfile((prev) => ({
-                        ...prev,
-                        posts: prev.posts.filter(
-                          (postItem) => postItem.id !== post.id
-                        ),
-                      }))
-                    }
-                  ></Post>
-                );
-              })}
+              {profile.posts.length ? (
+                profile.posts?.map((post) => {
+                  return (
+                    <Post
+                      authorId={profile.id}
+                      firstName={profile.firstName}
+                      lastName={profile.lastName}
+                      username={profile.username}
+                      profileImageUrl={profile.profileImageUrl}
+                      dateTime={post.dateTime}
+                      postId={post.id}
+                      content={post.content}
+                      photoUrl={post.photoUrl}
+                      initialLikeCount={post._count?.likedBy}
+                      initialIsLikedByAuthUser={post.likedByAuthUser}
+                      key={'profile-posts-' + post.id}
+                      removePost={() =>
+                        setProfile((prev) => ({
+                          ...prev,
+                          posts: prev.posts.filter(
+                            (postItem) => postItem.id !== post.id
+                          ),
+                        }))
+                      }
+                    ></Post>
+                  );
+                })
+              ) : (
+                <p className='text-center'>No posts yet</p>
+              )}
             </div>
           </>
         ) : (
