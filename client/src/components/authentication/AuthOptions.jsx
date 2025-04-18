@@ -28,13 +28,13 @@ export default function AuthOptions() {
     <>
       <a
         href='/api/auth/github'
-        className='text-decoration-none text-white bg-11 btn d-flex gap-1'
+        className='text-decoration-none text-white bg-secondary btn d-flex gap-1 rounded-5 ps-3 pe-3'
       >
         <img src={gitHubIcon} alt='' className='github-icon' />
         Continue with GitHub
       </a>
       <button
-        className='btn guest-login-button text-secondary auth-btn'
+        className='btn guest-login-button text-secondary auth-btn rounded-5 ps-3 pe-3'
         onClick={handleGuestLogin}
       >
         Continue as a guest

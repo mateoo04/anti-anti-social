@@ -105,6 +105,22 @@ p {
   padding-left: 40px;
 }
 
+@media (max-width: 501px) {
+  .comment-name-time-container {
+    flex-direction: column;
+    gap: 0;
+    align-items: start !important;
+  }
+}
+
+@media (min-width: 500px) {
+  .comment-name-time-container {
+    flex-direction: row;
+    gap: 0;
+    gap: 8px;
+  }
+}
+
 p {
   margin-bottom: 0 !important;
 }
@@ -277,13 +293,13 @@ img {
 
 @media (min-width: 700px) {
   .create-button {
-    bottom: 30px;
+    bottom: 40px;
   }
 }
 
 .create-button {
   position: fixed;
-  right: 20px;
+  right: 6%;
   font-size: 34px !important;
   font-weight: 500 !important;
   border-radius: 50% !important;

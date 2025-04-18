@@ -54,7 +54,7 @@ export default function LogIn() {
 
   return (
     <>
-      <main className='container flex-grow-1 d-flex flex-column justify-content-center align-items-center'>
+      <main className='container flex-grow-1 d-flex flex-column justify-content-start align-items-center'>
         <img src={logo} alt='' className='auth-logo' />
         {Object.values(errors).length ? (
           <div className='bg-warning rounded-4 p-3 mb-3'>
@@ -80,7 +80,7 @@ export default function LogIn() {
               name='username'
               id='username'
               {...register('username')}
-              className='form-control mb-3'
+              className='form-control mb-3 rounded-5 ps-3 pe-3'
             />
           </label>
           <label htmlFor='password'>
@@ -90,7 +90,7 @@ export default function LogIn() {
               name='password'
               id='password'
               {...register('password')}
-              className='form-control mb-3'
+              className='form-control mb-3 rounded-5 ps-3 pe-3'
             />
           </label>
         </form>
@@ -99,11 +99,11 @@ export default function LogIn() {
             form='login-form'
             type='submit'
             value='Log in'
-            className='btn bg-primary text-white auth-btn w-100'
+            className='btn bg-primary text-white auth-btn w-100 rounded-5 ps-3 pe-3'
           />
           <AuthOptions />
         </div>
-        <p className='text-center'>
+        <p className='text-center mt-2 pb-5'>
           Don't have an account yet?{' '}
           <Link to='/auth/sign-up'>Sign up here</Link>
         </p>

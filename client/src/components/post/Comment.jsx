@@ -18,10 +18,10 @@ export default function Comment({ comment, likeComment, unlikeComment }) {
               alt=''
               className='profile-photo-sm'
             />
-            <div className='d-flex gap-2 align-items-end'>
-              <h4 className='mb-0 h5'>
+            <div className='d-flex comment-name-time-container'>
+              <p className='mb-0 h6 text-secondary'>
                 {comment.author.firstName + ' ' + comment.author.lastName}
-              </h4>
+              </p>
               <p className='text-muted'>{formatDateTime(comment.dateTime)}</p>
             </div>
           </div>
