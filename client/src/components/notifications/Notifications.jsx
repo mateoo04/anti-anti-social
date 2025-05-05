@@ -15,7 +15,10 @@ export default function Notifications({
       case 'FOLLOW':
         return (
           <p
-            onClick={() => navigate(`/users/${notif.fromUser.id}`)}
+            onClick={() => {
+              setOpenNotifications(false);
+              navigate(`/users/${notif.fromUser.id}`);
+            }}
             className='cursor-pointer'
           >
             <b>
@@ -27,7 +30,10 @@ export default function Notifications({
       case 'LIKE':
         return (
           <p
-            onClick={() => navigate(`/posts/${notif.post.id}`)}
+            onClick={() => {
+              setOpenNotifications(false);
+              navigate(`/posts/${notif.post.id}`);
+            }}
             className='cursor-pointer'
           >
             <b>
@@ -39,7 +45,10 @@ export default function Notifications({
       case 'COMMENT':
         return (
           <p
-            onClick={() => navigate(`/posts/${notif.post.id}`)}
+            onClick={() => {
+              setOpenNotifications(false);
+              navigate(`/posts/${notif.post.id}`);
+            }}
             className='cursor-pointer'
           >
             <b>
@@ -80,9 +89,10 @@ export default function Notifications({
                     src={notification.fromUser.profileImageUrl || personSvg}
                     className='profile-photo-md cursor-pointer'
                     alt=''
-                    onClick={() =>
-                      navigate(`/users/${notification.fromUser.id}`)
-                    }
+                    onClick={() => {
+                      setOpenNotifications(false);
+                      navigate(`/users/${notification.fromUser.id}`);
+                    }}
                   />
                   <div>
                     {getNotifText(notification)}

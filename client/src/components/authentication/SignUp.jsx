@@ -134,7 +134,7 @@ export default function SignUp() {
             />
           </label>
         </form>
-        <div className='d-flex flex-column gap-2 mb-2'>
+        <div className='d-flex flex-column gap-2 mt-2 mb-2'>
           <input
             form='sign-up-form'
             type='submit'
@@ -143,7 +143,7 @@ export default function SignUp() {
           />
           <AuthOptions />
         </div>
-        <p className='text-center mt-2 pb-5'>
+        <p className='text-center mt-3 pb-5'>
           Already a user? <Link to='/auth/log-in'>Log in here</Link>
         </p>
       </main>

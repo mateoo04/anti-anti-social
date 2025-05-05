@@ -94,7 +94,7 @@ export default function LogIn() {
             />
           </label>
         </form>
-        <div className='d-flex flex-column gap-2 mb-2'>
+        <div className='d-flex flex-column gap-2 mt-2 mb-2'>
           <input
             form='login-form'
             type='submit'
@@ -103,7 +103,7 @@ export default function LogIn() {
           />
           <AuthOptions />
         </div>
-        <p className='text-center mt-2 pb-5'>
+        <p className='text-center mt-3 pb-5'>
           Don't have an account yet?{' '}
           <Link to='/auth/sign-up'>Sign up here</Link>
         </p>

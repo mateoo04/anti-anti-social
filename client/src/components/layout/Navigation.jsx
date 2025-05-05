@@ -87,7 +87,7 @@ export default function Navigation({
               }`}
             </p>
           </button>
-          <ul className='dropdown-menu dropdown-menu-light mt-2'>
+          <ul className='dropdown-menu dropdown-menu-light mt-2 user-options'>
             <li className='dropdown-item'>
               <button
                 onClick={() => {

@@ -294,6 +294,10 @@ img {
     box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.1);
     padding: 4px 0;
   }
+
+  .dropdown-menu.show {
+    margin-right: 70px !important;
+  }
 }
 
 @media (min-width: 700px) {
