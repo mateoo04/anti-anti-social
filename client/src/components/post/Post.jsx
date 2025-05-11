@@ -261,7 +261,6 @@ export default function Post({
           </div>
         )}
       </div>
-
       <div
         className={`mt-3 mb-2 comments ${showComments ? 'd-block' : 'd-none'}`}
       >

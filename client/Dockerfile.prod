@@ -1,0 +1,12 @@
+FROM node:20 AS client-builder
+
+WORKDIR /app
+
+COPY ./client/package*.json ./client
+
+WORKDIR /app/client
+
+RUN npm install
+
+COPY ./client ./
+RUN npm run build

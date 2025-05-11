@@ -23,7 +23,9 @@ async function respond(res, successStatusCode, user, isGitHubOauth) {
     sameSite: 'Strict',
   });
 
-  if (isGitHubOauth) res.redirect('/');
+  if (isGitHubOauth && process.env.NODE_ENV === 'production') res.redirect('/');
+  else if (isGitHubOauth && process.env.NODE_ENV === 'development')
+    res.redirect(process.env.FRONTEND_URL);
   else
     res.status(successStatusCode).json({
       success: true,

@@ -1,0 +1,76 @@
+volumes:
+  test_db_data: {}
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - '5173:5173'
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - client/.env
+    command: npm run dev
+    profiles: ['dev']
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./server:/app/server
+      - /app/server/node_modules
+    ports:
+      - '4000:4000'
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+    env_file:
+      - ./server/.env
+    working_dir: /app/server
+    command: npm run dev
+    profiles: ['dev']
+
+  # --- TESTING SERVICES ---
+
+  db-test:
+    image: postgres:15
+    restart: always
+    volumes:
+      - test_db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=testuser
+      - POSTGRES_PASSWORD=testpass
+      - POSTGRES_DB=test_db
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U testuser -d test_db -q']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    profiles: ['test']
+
+  server-test:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./server:/app/server
+      - /app/server/node_modules
+    environment:
+      - NODE_ENV=test
+      - PORT=4001
+      - DATABASE_URL=postgresql://testuser:testpass@db-test:5432/test_db
+      - SECRET=testsecret
+    env_file:
+      - ./server/.env.test
+    working_dir: /app/server
+    command: npm run test:full
+    depends_on:
+      db-test:
+        condition: service_healthy
+    profiles: ['test']

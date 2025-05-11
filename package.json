@@ -1,0 +1,21 @@
+{
+  "name": "anti-anti-social",
+  "version": "1.0.0",
+  "description": "Full-stack <b>social media platform</b> built with modern web technologies to emulate core features of popular social media apps. It allows users to create and discover content, interact with others and build a personalized profile. The application supports secure authentication including authentication using GitHub.",
+  "main": "index.js",
+  "scripts": {
+    "docker:dev": "docker compose -f docker-compose.dev.yml --profile dev up -d --build",
+    "docker:dev:logs": "docker compose -f docker-compose.dev.yml --profile dev logs -f",
+    "docker:dev:down": "docker compose -f docker-compose.dev.yml down -v",
+    "docker:test": "docker compose -f docker-compose.dev.yml --profile test up --build --abort-on-container-exit --exit-code-from server-test",
+    "docker:test:shell": "docker compose -f docker-compose.dev.yml --profile test run --rm server-test sh",
+    "docker:test:down": "docker compose -f docker-compose.dev.yml --profile test down -v",
+    "docker:prod:build": "docker compose -f docker-compose.prod.yml build",
+    "docker:prod:run": "docker compose -f docker-compose.prod.yml up -d",
+    "docker:prod:logs": "docker compose -f docker-compose.prod.yml logs -f",
+    "docker:prod:down": "docker compose -f docker-compose.prod.yml down -v"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

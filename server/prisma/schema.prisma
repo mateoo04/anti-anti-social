@@ -6,6 +6,8 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"] 
+  output = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -33,9 +35,9 @@ model User{
 }
 model Follows{
   followerId String
-  follower User @relation("FollowingRelation", fields: [followerId], references: [id])
+  follower User @relation("FollowingRelation", fields: [followerId], references: [id], onDelete: Cascade)
   followingId String
-  following User @relation("FollowersRelation", fields: [followingId], references: [id])
+  following User @relation("FollowersRelation", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@id([followerId, followingId])
 }
@@ -46,7 +48,7 @@ model Post{
   content String
   photoUrl String?
   authorId String
-  author User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   comments Comment[]
   likedBy User[] @relation("LikedPosts")
   notifications Notification[]
@@ -57,7 +59,7 @@ model Comment{
   dateTime DateTime @default(now())
   content String
   authorId String
-  author User @relation(fields: [authorId], references: [id])
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   postId String
   post Post @relation(fields: [postId], references: [id])
   likedBy User[] @relation("LikedComments")
@@ -75,9 +77,9 @@ model Notification{
   dateTime DateTime @default(now())
   type NotificationType
   fromUserId String
-  fromUser User @relation("NotificationFrom", fields: [fromUserId], references: [id])
+  fromUser User @relation("NotificationFrom", fields: [fromUserId], references: [id], onDelete: Cascade)
   toUserId String
-  toUser User @relation("NotificationTo", fields: [toUserId], references: [id])
+  toUser User @relation("NotificationTo", fields: [toUserId], references: [id], onDelete: Cascade)
   postId String?
   post Post? @relation(fields: [postId], references: [id])
   isRead Boolean @default(false)

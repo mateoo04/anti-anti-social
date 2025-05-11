@@ -1,0 +1,37 @@
+FROM node:20 AS client-builder
+
+WORKDIR /app/client 
+
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_API_KEY
+
+COPY ./client/package*.json ./
+
+RUN npm install
+
+COPY ./client/ ./
+    
+RUN VITE_SUPABASE_URL=${VITE_SUPABASE_URL} \
+    VITE_SUPABASE_API_KEY=${VITE_SUPABASE_API_KEY} \
+    npm run build
+    
+
+FROM node:20
+WORKDIR /app/server 
+
+COPY ./server/package*.json ./
+
+RUN npm install
+
+COPY ./server/prisma ./prisma
+RUN npx prisma generate
+    
+COPY --from=client-builder /app/client/dist ../client/dist 
+    
+COPY ./server/ ./
+    
+ENV NODE_ENV=production
+
+EXPOSE 4000
+
+CMD ["npm", "start"]
