@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
+import socket from '../utils/socket';
 
 const AuthContext = createContext();
 
@@ -25,8 +26,12 @@ export function AuthProvider({ children }) {
       const json = await response.json();
 
       if (json.success) {
+        socket.emit('leaveRoom', `notifs-${authenticatedUser.id}`);
+
         setIsAuthenticated(false);
         setAuthenticatedUser({});
+
+        window.location.href = '/auth/log-in';
       }
     } catch {
       toast.error('Error logging out');

@@ -8,8 +8,6 @@ import compassIcon from '../../assets/icons/nav/compass.svg';
 import compassFillIcon from '../../assets/icons/nav/compass-fill.svg';
 import personIcon from '../../assets/icons/person-circle.svg';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import socket from '../../utils/socket';
 import { useAuth } from '../../context/authContext';
 import NotificationsBell from '../notifications/NotificationsBell';
 
@@ -18,27 +16,8 @@ export default function Navigation({
   setOpenNotifications,
 }) {
   const location = useLocation();
-  const { authenticatedUser, setAuthenticatedUser, isAuthenticated } =
-    useAuth();
+  const { authenticatedUser, logOut, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
-  const logOut = async () => {
-    try {
-      const response = await fetch('/api/auth/log-out', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      if (!response.ok) throw new Error('Failed to log out');
-
-      setAuthenticatedUser({});
-      navigate('/auth/log-in');
-
-      socket.emit('leaveRoom', `notifs-${authenticatedUser.id}`);
-    } catch {
-      toast.error('Failed to log out');
-    }
-  };
 
   return (
     <nav className='d-flex gap-3 align-items-center main-nav'>
@@ -90,8 +69,7 @@ export default function Navigation({
           <ul className='dropdown-menu dropdown-menu-light mt-2 user-options'>
             <li className='dropdown-item'>
               <button
-                onClick={() => {
-                  document.body.click();
+                onMouseDown={() => {
                   navigate(
                     isAuthenticated ? `/users/${authenticatedUser.id}` : '/'
                   );
@@ -103,8 +81,7 @@ export default function Navigation({
             </li>
             <li className='dropdown-item'>
               <button
-                onClick={() => {
-                  document.body.click();
+                onMouseDown={() => {
                   navigate(isAuthenticated ? `/edit-profile` : '/');
                 }}
                 className='btn p-0 text-black'
@@ -114,8 +91,7 @@ export default function Navigation({
             </li>
             <li className='dropdown-item'>
               <button
-                onClick={async () => {
-                  document.body.click();
+                onMouseDown={async () => {
                   await logOut();
                 }}
                 className='border-0 bg-transparent ps-0'

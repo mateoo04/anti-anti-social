@@ -12,7 +12,7 @@ export function NotificationsProvider({ children }) {
 
   useEffect(() => {
     const fetchNotifications = async () => {
-      if (!isAuthenticated) return;
+      if (!isAuthenticated && authenticatedUser) return;
 
       try {
         const response = await fetch('/api/notifications', {

@@ -10,7 +10,7 @@
     "docker:test": "docker compose -f docker-compose.dev.yml --profile test up --build --abort-on-container-exit --exit-code-from server-test",
     "docker:test:shell": "docker compose -f docker-compose.dev.yml --profile test run --rm server-test sh",
     "docker:test:down": "docker compose -f docker-compose.dev.yml --profile test down -v",
-    "docker:prod:build": "docker compose -f docker-compose.prod.yml build",
+    "docker:prod:build": "cd server && npx prisma migrate deploy && cd .. && docker compose -f docker-compose.prod.yml build",
     "docker:prod:run": "docker compose -f docker-compose.prod.yml up -d",
     "docker:prod:logs": "docker compose -f docker-compose.prod.yml logs -f",
     "docker:prod:down": "docker compose -f docker-compose.prod.yml down -v"

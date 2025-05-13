@@ -12,5 +12,5 @@ services:
     environment:
       - NODE_ENV=production
     env_file:
-      - ./server/.env
+      - ./.env
     command: npm start
