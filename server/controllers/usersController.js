@@ -268,6 +268,10 @@ async function updateUserProfile(req, res, next) {
 
     if (req.body.username && usernameTaken)
       return res.status(409).json({ message: 'Username is not available.' });
+    else if (req.body.bio.length > 150)
+      return res
+        .status(400)
+        .json({ message: 'Bio must not be longer than 150 characters.' });
 
     const updatedUser = await prisma.user.update({
       where: {

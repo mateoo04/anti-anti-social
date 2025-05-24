@@ -206,6 +206,7 @@ export default function EditProfile() {
             <textarea
               name='bio'
               id='bio'
+              maxLength={150}
               {...register('bio')}
               className='rounded-5 p-3 form-control mb-3'
             ></textarea>

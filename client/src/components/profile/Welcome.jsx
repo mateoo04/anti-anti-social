@@ -102,8 +102,7 @@ export default function Welcome() {
             <textarea
               name='bio'
               id='bio'
-              minLength={2}
-              maxLength={50}
+              maxLength={150}
               onChange={(e) => setBio(e.target.value)}
               className='form-control mb-3'
             ></textarea>
