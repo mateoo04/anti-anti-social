@@ -6,6 +6,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 import NotFound from './NotFound';
 import Search from './Search';
 import Profile from './profile/Profile';
+import AdminPanel from './admin/AdminPanel';
 import ProtectedRoute from './ProtectedRoute';
 import FollowsList from './profile/FollowsList';
 import EditPost from './post/EditPost';
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
         loader: explorePageLoader,
         element: <PostCarousel />,
         hydrateFallbackElement: <HydrateFallback />,
+      },
+      {
+        path: 'admin',
+        element: <AdminPanel />,
       },
       {
         path: 'welcome',

@@ -12,7 +12,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User{
@@ -32,6 +31,10 @@ model User{
   likedComments Comment[] @relation("LikedComments")
   sentNotifications Notification[] @relation("NotificationFrom")
   receivedNotifications Notification[] @relation("NotificationTo")
+  isAdmin Boolean @default(false)
+  isRestricted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime? @updatedAt
 }
 model Follows{
   followerId String

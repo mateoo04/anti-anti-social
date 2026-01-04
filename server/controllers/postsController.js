@@ -1,7 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
+
 const { events } = require('../config/events');
 
-const prisma = new PrismaClient();
+const prisma = require("../lib/prisma");
 
 async function getFollowingsPosts(req, res, next) {
   const where = {

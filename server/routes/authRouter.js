@@ -12,8 +12,8 @@ const {
 const { validateSignUp, validateLogIn } = require('../lib/validators');
 const { passport } = require('../config/passport');
 
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+
+const prisma = require("../lib/prisma");
 
 const authRouter = Router();
 

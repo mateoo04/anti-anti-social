@@ -47,6 +47,7 @@ export default function EditPost() {
       return;
     }
 
+    let response = {};
     try {
       const uploadObj = { content };
 
@@ -59,7 +60,7 @@ export default function EditPost() {
         else uploadObj.photoUrl = photoUrlResult;
       }
 
-      const response = await fetch('/api/posts/new', {
+      response = await fetch('/api/posts/new', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -72,7 +73,7 @@ export default function EditPost() {
 
       navigate(`/users/${authenticatedUser.id}`);
     } catch {
-      toast.error('Failed to post');
+      toast.error(`Failed to post${response.status == 403 ? ' (you may be restricted)' : ''}`);
     }
   };
 

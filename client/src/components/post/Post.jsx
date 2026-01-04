@@ -37,8 +37,9 @@ export default function Post({
   const navigate = useNavigate();
 
   const likePost = async () => {
+    let response = {};
     try {
-      const response = await fetch(`/api/posts/${postId}/like`, {
+      response = await fetch(`/api/posts/${postId}/like`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -48,13 +49,14 @@ export default function Post({
       setLikeCount((prev) => prev + 1);
       setIsLikedByAuthUser(true);
     } catch {
-      toast.error('Failed to like the post');
+      toast.error(`Failed to like the post${response.status === 403 ? ' (you may be restricted)' : ''}`);
     }
   };
 
   const unlikePost = async () => {
+    let response = {};
     try {
-      const response = await fetch(`/api/posts/${postId}/unlike`, {
+      response = await fetch(`/api/posts/${postId}/unlike`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -64,7 +66,7 @@ export default function Post({
       setLikeCount((prev) => prev - 1);
       setIsLikedByAuthUser(false);
     } catch {
-      toast.error('Failed to unlike the post');
+      toast.error(`Failed to unlike the post${response.status === 403 ? ' (you may be restricted)' : ''}`);
     }
   };
 
@@ -74,8 +76,9 @@ export default function Post({
       return;
     }
 
+    let response = {};
     try {
-      const response = await fetch(`/api/posts/${postId}/comments`, {
+      response = await fetch(`/api/posts/${postId}/comments`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -94,7 +97,7 @@ export default function Post({
         ...prev,
       ]);
     } catch {
-      toast.error('Failed to post the comment');
+      toast.error(`Failed to post the comment${response.status === 403 ? ' (you may be restricted)' : ''}`);
     }
   };
 
@@ -120,8 +123,9 @@ export default function Post({
   }, [showComments, postId]);
 
   const likeComment = async (commentId) => {
+    let response = {};
     try {
-      const response = await fetch(
+      response = await fetch(
         `/api/posts/${postId}/comments/${commentId}/like`,
         {
           method: 'POST',
@@ -143,13 +147,14 @@ export default function Post({
         })
       );
     } catch {
-      toast.error('Failed to like the comment');
+      toast.error(`Failed to like the comment${response.status === 403 ? ' (you may be restricted)' : ''}`);
     }
   };
 
   const unlikeComment = async (commentId) => {
+    let response = {};
     try {
-      const response = await fetch(
+      response = await fetch(
         `/api/posts/${postId}/comments/${commentId}/unlike`,
         {
           method: 'POST',
@@ -171,7 +176,7 @@ export default function Post({
         })
       );
     } catch {
-      toast.error('Failed to unlike the comment');
+      toast.error(`Failed to unlike the comment${response.status === 403 ? ' (you may be restricted)' : ''}`);
     }
   };
 

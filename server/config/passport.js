@@ -1,9 +1,9 @@
 const { Strategy, ExtractJwt } = require('passport-jwt');
 const passport = require('passport');
-const { PrismaClient } = require('@prisma/client');
+
 const GitHubStrategy = require('passport-github2');
 
-const prisma = new PrismaClient();
+const prisma = require("../lib/prisma");
 
 const cookieExtractor = (req) => {
   let token = null;

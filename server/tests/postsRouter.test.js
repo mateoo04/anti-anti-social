@@ -1,10 +1,10 @@
 require('dotenv').config({ path: '.env.test' });
 
 const request = require('supertest');
-const { PrismaClient } = require('@prisma/client');
+
 const { getApp, createUser } = require('./utils/helpers');
 
-const prisma = new PrismaClient();
+const prisma = require("../lib/prisma");
 
 const app = getApp();
 

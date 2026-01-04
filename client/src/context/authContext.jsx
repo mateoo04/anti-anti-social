@@ -71,8 +71,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   const follow = async (id) => {
+    let response = {};
     try {
-      const response = await fetch(`/api/users/${id}/follow`, {
+      response = await fetch(`/api/users/${id}/follow`, {
         method: 'POST',
         credentials: 'include',
       });
@@ -85,13 +86,14 @@ export function AuthProvider({ children }) {
       }));
     } catch (err) {
       console.log(err);
-      toast.error('Failed to follow the account');
+      toast.error(`Failed to follow the account${response.status === 403 ? ' (you may be restricted)' : ''}`);
     }
   };
 
   const unfollow = async (id) => {
+    let response = {};
     try {
-      const response = await fetch(`/api/users/${id}/unfollow`, {
+      response = await fetch(`/api/users/${id}/unfollow`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -104,7 +106,43 @@ export function AuthProvider({ children }) {
       }));
     } catch (err) {
       console.log(err);
-      toast.error('Failed to unfollow the account');
+      toast.error(`Failed to unfollow the account${response.status === 403 ? ' (you may be restricted)' : ''}`);
+    }
+  };
+
+    const setRestrictedStatus = async (id, restricted) => {
+    try {
+      const response = await fetch(`/api/admin/users/${id}/restrict`, {
+        method: 'PATCH',
+        credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ restricted })
+      });
+
+      if (!response.ok) throw new Error('Error trying to restrict the account');
+    } catch (err) {
+      console.log(err);
+      toast.error('Error trying to restrict the account');
+    }
+  };
+
+      const setAdminStatus = async (id, admin) => {
+    try {
+      const response = await fetch(`/api/admin/users/${id}/admin`, {
+  method: 'PATCH',
+  credentials: 'include',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ isAdmin: admin })
+});
+
+      if (!response.ok) throw new Error('Error trying to grant admin to the account');
+    } catch (err) {
+      console.log(err);
+      toast.error('Error trying to grant admin to the account');
     }
   };
 
@@ -118,6 +156,8 @@ export function AuthProvider({ children }) {
         logOut,
         follow,
         unfollow,
+        setRestrictedStatus,
+        setAdminStatus
       }}
     >
       {children}

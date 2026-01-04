@@ -1,7 +1,7 @@
-const { PrismaClient } = require('@prisma/client');
+
 const { events } = require('../config/events');
 
-const prisma = new PrismaClient();
+const prisma = require("../lib/prisma");
 
 async function getAllUsers(req, res, next) {
   try {
@@ -268,7 +268,7 @@ async function updateUserProfile(req, res, next) {
 
     if (req.body.username && usernameTaken)
       return res.status(409).json({ message: 'Username is not available.' });
-    else if (req.body.bio.length > 150)
+    else if (req.body.bio?.length > 150)
       return res
         .status(400)
         .json({ message: 'Bio must not be longer than 150 characters.' });

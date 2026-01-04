@@ -1,11 +1,11 @@
 const { issueJWT } = require('../lib/utils');
 const bcrypt = require('bcryptjs');
-const { PrismaClient } = require('@prisma/client');
+
 const { validationResult } = require('express-validator');
 const { passport } = require('../config/passport');
 const { createGuestIfNotExists } = require('../lib/guestCreate');
 
-const prisma = new PrismaClient();
+const prisma = require("../lib/prisma");
 
 async function respond(res, successStatusCode, user, isGitHubOauth) {
   const tokenObj = issueJWT(user);
@@ -69,6 +69,8 @@ async function signUp(req, res, next) {
         lastName: true,
         username: true,
         bio: true,
+        isAdmin: true,
+        isRestricted: true,
         profileImageUrl: true,
         followers: true,
         following: true,
@@ -102,6 +104,8 @@ async function logIn(req, res, next) {
         bio: true,
         password: true,
         profileImageUrl: true,
+        isAdmin: true,
+        isRestricted: true,
         followers: {
           select: {
             followerId: true,
@@ -205,6 +209,8 @@ async function validateCredentials(req, res, next) {
         lastName: true,
         bio: true,
         username: true,
+        isAdmin: true,
+        isRestricted: true,
         profileImageUrl: true,
         followers: {
           select: {

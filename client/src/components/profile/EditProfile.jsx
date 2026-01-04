@@ -69,6 +69,7 @@ export default function EditProfile() {
   }, [authenticatedUser, reset]);
 
   const updateUser = async (formFields) => {
+    let response = {};
     try {
       const updatedFields = Object.fromEntries(
         Object.entries(formFields).filter(
@@ -95,7 +96,7 @@ export default function EditProfile() {
         delete updatedFields.file;
       }
 
-      const response = await fetch('/api/users', {
+      response = await fetch('/api/users', {
         method: 'PUT',
         credentials: 'include',
         headers: {
@@ -116,8 +117,7 @@ export default function EditProfile() {
       setAuthenticatedUser((prev) => ({ ...prev, ...json }));
       navigate(`/users/${authenticatedUser.id}`);
     } catch (err) {
-      console.error(err);
-      toast.error('Failed to save changes');
+      toast.error(`Failed to save changes${response.status === 403 ? ' (you may be restricted)' : ''}`);
     }
   };
 

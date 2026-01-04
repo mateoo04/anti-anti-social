@@ -4,7 +4,7 @@ import ProfilesList from './profile/ProfilesList';
 import { useAuth } from '../context/authContext';
 import Header from './layout/Header';
 
-export default function Search() {
+export default function Search({isAdminPanel = false}) {
   const { authenticatedUser, setAuthenticatedUser } = useAuth();
   const [search, setSearch] = useState('');
   const [users, setUsers] = useState([]);
@@ -31,8 +31,8 @@ export default function Search() {
   }, [search]);
   return (
     <>
-      <main className='container'>
-        <h1>Search</h1>
+      <div className='container'>
+        { !isAdminPanel ? <h1>Search</h1> : <h2>Users</h2>}
         <input
           type='text'
           id='userSearch'
@@ -45,8 +45,10 @@ export default function Search() {
           setAuthenticatedUser={setAuthenticatedUser}
           users={users}
           onEmptyMessage={'No results'}
+          isAdminPanel={isAdminPanel}
+          setUsers={setUsers}
         ></ProfilesList>
-      </main>
+      </div>
     </>
   );
 }

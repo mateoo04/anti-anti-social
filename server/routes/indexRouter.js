@@ -3,7 +3,9 @@ const { passport } = require('../config/passport');
 const authRouter = require('../routes/authRouter');
 const usersRouter = require('./usersRouter');
 const postsRouter = require('./postsRouter');
+const adminRouter = require('./adminRouter');
 const { notificationsRouter } = require('./notificationsRouter');
+const { requireAdmin } = require('../middleware/requireAdmin');
 
 const indexRouter = Router();
 
@@ -25,6 +27,13 @@ indexRouter.use(
   '/notifications',
   passport.authenticate('jwt', { session: false }),
   notificationsRouter
+);
+
+indexRouter.use(
+  '/admin',
+  passport.authenticate('jwt', { session: false }),
+  requireAdmin,
+  adminRouter
 );
 
 indexRouter.get('/', (req, res) =>

@@ -1,8 +1,8 @@
 const { faker } = require('@faker-js/faker');
 const bcrypt = require('bcryptjs');
-const { PrismaClient } = require('@prisma/client');
 
-const prisma = new PrismaClient();
+
+const prisma = require("../lib/prisma");
 
 async function createGuestIfNotExists() {
   const select = {

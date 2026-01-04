@@ -79,6 +79,18 @@ export default function Navigation({
                 View profile
               </button>
             </li>
+            {authenticatedUser.isAdmin ? <li className='dropdown-item'>
+              <button
+                onMouseDown={() => {
+                  navigate(
+                    isAuthenticated ? `/admin` : '/'
+                  );
+                }}
+                className='btn p-0 text-black'
+              >
+                Admin panel
+              </button>
+            </li> : ''}
             <li className='dropdown-item'>
               <button
                 onMouseDown={() => {
