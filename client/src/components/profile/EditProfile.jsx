@@ -39,7 +39,7 @@ const editUserSchema = z.object({
 });
 
 export default function EditProfile() {
-  const { authenticatedUser, setAuthenticatedUser } = useAuth();
+  const { authenticatedUser, setAuthenticatedUser, setIsAuthenticated } = useAuth();
   const navigate = useNavigate();
   const photoRef = useRef();
 
@@ -147,6 +147,7 @@ export default function EditProfile() {
       if (!response.ok) throw new Error('Failed to delete account');
 
       setAuthenticatedUser(null);
+      setIsAuthenticated(false);
       navigate('/');
       toast.success('Account deleted');
     } catch (err) {

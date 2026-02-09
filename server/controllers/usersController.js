@@ -313,6 +313,8 @@ async function deleteAccount(req, res, next) {
       },
     });
 
+    res.clearCookie('authToken', { httpOnly: true });
+    res.clearCookie('username', { httpOnly: false });
     return res.json({ message: 'Account deleted' });
   } catch (err) {
     next(err);
