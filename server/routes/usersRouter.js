@@ -7,6 +7,7 @@ const {
   unfollowUser,
   removeFollower,
   updateUserProfile,
+    deleteAccount,
 } = require('../controllers/usersController');
 
 const usersRouter = Router();
@@ -20,5 +21,7 @@ usersRouter.post('/:userId/follow', requireNotRestricted, followUser);
 
 usersRouter.delete('/:userId/unfollow', requireNotRestricted, unfollowUser);
 usersRouter.delete('/:userId/remove-follower', requireNotRestricted, removeFollower);
+
+usersRouter.delete('/delete-account', deleteAccount);
 
 module.exports = usersRouter;

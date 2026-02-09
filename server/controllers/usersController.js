@@ -300,6 +300,25 @@ async function updateUserProfile(req, res, next) {
   }
 }
 
+async function deleteAccount(req, res, next) {
+  try {
+    if (req.user?.username === 'jan rolf')
+      return res
+        .status(403)
+        .json({ message: 'This account cannot be deleted.' });
+
+    await prisma.user.delete({
+      where: {
+        id: req.user.id,
+      },
+    });
+
+    return res.json({ message: 'Account deleted' });
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getAllUsers,
   getUserById,
@@ -307,4 +326,5 @@ module.exports = {
   unfollowUser,
   removeFollower,
   updateUserProfile,
+  deleteAccount
 };

@@ -131,6 +131,29 @@ export default function EditProfile() {
     }
   };
 
+  const deleteAccount = async () => {
+    const confirmed = window.confirm(
+      'This will permanently delete your account. Continue?'
+    );
+    if (!confirmed) return;
+
+    let response = {};
+    try {
+      response = await fetch('/api/users/delete-account', {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (!response.ok) throw new Error('Failed to delete account');
+
+      setAuthenticatedUser(null);
+      navigate('/');
+      toast.success('Account deleted');
+    } catch (err) {
+      toast.error('Failed to delete account');
+    }
+  };
+
   return (
     <>
       <main className='container'>
@@ -217,6 +240,15 @@ export default function EditProfile() {
             className='btn rounded-5 pt-2 pb-2 bg-secondary text-white'
           />
         </form>
+        <div className='container ps-3 pe-3'>
+        <button
+          type='button'
+          onClick={deleteAccount}
+          className='btn rounded-5 pt-2 pb-2 w-100 bg-danger text-white'
+        >
+          DELETE ACCOUNT
+        </button>
+        </div>
       </main>
     </>
   );
